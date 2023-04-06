@@ -1,3 +1,8 @@
+## Custom
+output/
+hpp-manual.pdf
+indent.log
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -241,7 +246,7 @@ TSWLatexianTemp*
 
 ## Editors:
 # WinEdt
-*.bak
+*.bak*
 *.sav
 
 # Texpad
