@@ -35,15 +35,15 @@
 
 % UNCOMMENT BEGINS HERE
 
-% \defaultfontfeatures{Scale=MatchLowercase,
-%     Mapping=tex-text}
-% \setmainfont[Mapping=tex-text, % E.g. -- -> en-dash
-%     RawFeature={
-%             +onum;
-%         },
-% ]{Libertinus Serif}
-% \setmonofont{Iosevka Term}
-% \setmathfont[math-style=ISO, bold-style=ISO]{Libertinus Math} %
+\defaultfontfeatures{Scale=MatchLowercase,
+    Mapping=tex-text}
+\setmainfont[Mapping=tex-text, % E.g. -- -> en-dash
+    RawFeature={
+            +onum;
+        },
+]{Libertinus Serif}
+\setmonofont{Iosevka Term}
+\setmathfont[math-style=ISO, bold-style=ISO]{Libertinus Math} %
 
 % UNCOMMENT ENDS HERE
 
@@ -101,6 +101,9 @@
 \DeclareSIUnit{\arcsecond}{\text{arcsec}}
 \DeclareSIUnit{\arcminute}{\text{arcmin}}
 \DeclareSIUnit{\adu}{\textsc{adu}}
+\DeclareSIUnit{\parsec}{\text{pc}}
+\DeclareSIUnit{\angstrom}{\text{Å}}
+\DeclareSIUnit{\erg}{\text{erg}}
 
 \usepackage{xparse}
 
@@ -1923,6 +1926,130 @@ A\&A 558, A33 (2013)).
 Phoutils: DOI 10.5281/zenodo.1340699
 
 Credits and many thanks to Stuart Littlefair \url{http://slittlefair.staff.shef.ac.uk}.
+
+\chapter{Photometric calibration}
+
+Often, we want to measure the brightness of an object in some standardised system, for example the luminosity in Watts, so that we can compare it to other known objects, and previous measurements by other observers.
+
+For this chapter, we assume that we measure only in a single wavelength band, i.e. with a single filter. If multiple filters are used, the procedure has to be repeated for each filter.
+
+
+\section*{Theory: Units of brightness}
+
+\paragraph*{Analog-to-digital-units}
+What we measure is the number of counts $N_\text{\textsc{adu}}$ that are registered on the sensor in each pixel during an exposure.
+They depend on the observing conditions, the telescope used, the quantum efficiency of the sensor, the spectrum of the light, and many other factors.
+Before we can extract useful quantities, we have to perform calibrations.
+
+\paragraph*{Photons}
+Using the specification for the gain of the camera, which is $g = \SI{1.27}{\electron}/\text{\textsc{adu}}$ as shown in \cref{tab:specs-camera}, we can determine how many electrons $N_e$ this corresponds to using
+\begin{align*}
+    N_e = g N_\text{\textsc{adu}}.
+\end{align*}
+The number of photons that have been registered on the detector is equal to the number of electrons, so we usually use $N_e$ as a proxy for photons as well.
+
+\paragraph*{Instrumental magnitude}
+The instrumental magnitude $m_\text{inst}$ of an object is a unitless quantity defined as
+\begin{align*}
+    m_\text{inst} = − 2.5 \log(N_e/t),
+\end{align*}
+where $t$ is the exposure time of the image.
+As the name suggests, the instrumental magnitude still depends on the specific instrument used to observe a target.
+
+\paragraph*{Apparent magnitude}
+The apparent magnitude $m$ of an object is a unitless quantity defined as
+\begin{align*}
+    m = - 2.5 \log(F/F_0),
+\end{align*}
+where $F$ is the flux of an object that reaches Earth, and $F_0$ is the flux of Vega, observed through the same filter.
+We can see that magnitudes are a measurement system for ratios: A star that appears 100 times dimmer than Vega has a magnitude of $- 2.5 \log(1/100) = 5$.
+To get from the instrumental magnitude to the apparent magnitude, we have to perform photometric calibration with photometric standard stars, TODO see later.
+
+\paragraph*{Absolute magnitude}
+The absolute magnitude $m$ of an object is a unitless quantity defined as
+\begin{align*}
+    M = m - 5 \log(d/\text{pc}) + 5,
+\end{align*}
+where $d$ is the distance from the observer to the object, and a \si{\parsec}, short for parsec, is a unit of distance.
+
+In other words, the absolute magnitude of an object is the apparent magnitude it would have if we brought it to a distance of \SI{10}{\parsec}, where the term $- 5 \log(d/\text{pc}) + 5$ evaluates to zero.
+
+\paragraph*{Flux}
+
+\paragraph*{Luminosity}
+
+
+
+
+\begin{table}
+    \centering
+    \begin{tabular}{llll}
+        \toprule
+        Quantity & Symbol & Unit & Defining equation\\
+        \midrule
+        \textsc{Adu} rate & $N_\text{\textsc{adu}}/t$ & \si{\per\second} & \\
+        Electron rate & $N_e/t$ & \si{\per\second} & \\
+        Instrumental magnitude & $m_\text{inst}$ & unitless & $m_\text{inst} = − 2.5 \log(N_e/t)$\\
+        (Apparent) magnitude & $m$ & unitless &  $m = - 2.5 \log(F/F_0)$\\
+        Absolute magnitude & $M$ & unitless & $M = m - 5 \log(d/\text{pc}) + 5$ \\
+        Flux & $F$ & \si{\watt\per\meter\squared} & \\
+        Luminosity & $L$ & \si{\watt} & $L = 4 \pi d^2 F$ \\
+        \bottomrule 
+    \end{tabular}
+    \caption{Common methods to state brightness, and their defining equations. Quantities: $d$ is the distance between the object and the observer.}
+    \label{tab:brightness-quantities}
+\end{table}
+
+\section{Step-by-step calibration}
+
+We have corrected our science frames with dark frames and flat frames, we have subtracted the background from each corrected frame, and we have aligned and stacked them into one final image of our target.
+
+To perform photometric calibration, we need observations of two targets: The actual target we want to measure the brightness of, and a reference target, usually a standard star.
+
+The rough plan is the following: Count how many electrons are registered on the sensor per second from the standard star, and look up the apparent magnitude of the standard star from a table -- this gives us a conversion between electrons per second and apparent magnitude.
+We then count how many electrons arrive per second from our unknown target, and use the conversion factor to derive the apparent magnitude of the target.
+After that, getting absolute magnitude, flux, and luminosity is just plugging in into some equations.
+
+\paragraph*{Magnitude zero point}
+Look up the magnitude of the standard star $m$ in the filter you are observing in from a table.
+Calculate the instrumental magnitude of the reference star using
+\begin{align*}
+    m_\text{inst} = − 2.5 \log(N_e/t).
+\end{align*}
+Then, the magnitude-zero point of $m_\text{zp}$ of the image results from
+\begin{align*}
+    m = m_\text{inst} + m_\text{zp}.
+\end{align*}
+The idea: The magnitude zero point is approximately the same if the reference star and the target are observed at a similar time, at a similar region of the sky, with the same instrument.
+So we can reuse $m_\text{zp}$ for the image of the target as well!
+
+\paragraph*{Apparent magnitude of the target}
+Assume we have counted the electron rate $N_e/t$ of the target.
+Then we get the apparent magnitude of the target using again
+\begin{align*}
+    m = m_\text{inst} + m_\text{zp},
+\end{align*}
+where this time $m$ is the unknown, and the other two are known.
+
+\paragraph*{Flux}
+
+\begin{table}
+    \centering
+    \sisetup{per-mode=reciprocal}
+    \begin{tabular}{lSSSSS}
+        \toprule
+        & {U} & {B} & {V} & {R} & {I}\\
+        \midrule
+        $\lambda_\text{eff}/\si{\nm}$ & 366 & 483 & 545 & 641 & 798\\
+        $\Delta \lambda/\si{\nm}$ & 60 & 90 & 85 & 150 & 150\\ 
+        $f_\lambda/(\SI{e-11}{\erg\per\cm\squared\per\angstrom})$ & 417.5 & 632 & 363.1 & 217.7 & 112.6 \\
+        \bottomrule 
+    \end{tabular}
+    \sisetup{per-mode=symbol}
+    \caption{Reference fluxes $F_0$ for common filters, from TODO}
+    % https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1998A%26A...333..231B&defaultprint=YES&filetype=.pdf p244
+    % https://www.astronomy.ohio-state.edu/martini.10/usefuldata.html
+\end{table}
 
 \chapter{Spectroscopy}
 
