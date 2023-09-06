@@ -1,3 +1,5 @@
+% !TEX options=--shell-escape
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                               
 %       User guide for the HPP observatory                           
@@ -6,6 +8,7 @@
 %       Andreas Bazzon                                          
 %       Version 1.0                                             
 %       February 2014
+%
 %       Natalia Engler
 %       Version 1.1
 %       November 2016
@@ -16,6 +19,10 @@
 %
 %       Thomas Birbacher
 %       Version 3.0
+%       2023
+%
+%       Nicolas Feuchthoften & Alexander Liemen
+%       Version 3.1
 %       2023
 %                                                               
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,9 +196,7 @@
     tabsize=4,
     captionpos=b
 }
-\usepackage[
-    outputdir=output
-]{minted}
+\usepackage[]{minted}
 
 \setminted{
     autogobble,
@@ -291,21 +296,20 @@
 \begin{titlingpage}
     \begin{center}
         \vspace{4cm}
-        {\large\bfseries Andreas Bazzon}\\
-        {\large\bfseries Thomas Birbacher}\\
-        {\large\bfseries Natalia Engler}\\
-        {\large\bfseries Luca Tortorelli}\\
+        {\large\bfseries
+        \begin{tabular}{ccc}
+            Andreas Bazzon & Thomas Birbacher & Natalia Engler\\
+            Nicolas Feuchthofen & Alexander Liemen & Luca Tortorelli
+        \end{tabular}
+        }\\
         \vspace{3cm}
-        {\scalebox{1.8}{\Huge\bfseries \addfontfeature{LetterSpace=2.0}
-                HPP TELESCOPE}}\\ \vspace{0.6cm} {\LARGE\bfseries \addfontfeature{LetterSpace=2.0} USER MANUAL
-            $
-                \bullet
-            $
-            EXPERIMENTS
-            $
-                \bullet
-            $
-            DATA ANALYSIS}\\ \vfill \includegraphics{eth-logo}\\ \today
+        {\scalebox{1.8}{\Huge\bfseries \addfontfeature{LetterSpace=2.0} HPP TELESCOPE}}\\
+        \vspace{0.6cm}
+        {\LARGE\bfseries \addfontfeature{LetterSpace=2.0} USER MANUAL}\\
+        \vfill
+        \includegraphics{eth-logo}\\
+        Version 3.1\\
+        \today
     \end{center}
 \end{titlingpage}
 
@@ -841,37 +845,148 @@ The following software on the remote computer can be used:
 \end{itemize}
 The following sections explain in more detail how the software can be used to perform observations.
 
-\section{N.
-  I.N.A.
-  : Instrument operation}
+\section{N.I.N.A.: Instrument operation}
 
-\subsection{Start-up}
-Connect instruments, cool the camera (might have to re-press if it gets stuck) Unpark the mount.
+\subsection{Start-up}\label{sec:NINA:start-up}
 
-\subsection{TODO}
-Clock sync
+First, all relevant instruments have to be connected. This includes the camera, the filter view and the mount. The order does not matter. Connect the individual parts by navigating to them in the equipment tab (make sure you have selected 'Equipment' all the way on the left) and then clicking on the on/off button at the top. Each time a successful connection has been made, you should see a confirmation message on the bottom right. Additional windows might open, just ignore them for now, but do not close them. For the camera, the cooling has to be engaged and the mount must be unparked using the respective buttons. Refer to the figures below.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/CameraDP.png}
+    \caption{Connecting the camera. Select 'Camera' on the equipment tab, then connect the camera using the on/off button. Afterwards, check that the cooling is set to $-15\,\si{\degreeCelsius}$, then click on the snowflake to engage cooling. Make sure the temperature drops as expected. If the cooling gets 'stuck', simply repress the snowflake button. The same goes for the flame button when shutting down the equipment.
+    }
+    \label{fig:NINA:Camera Connection}
+\end{figure}
 
-Load from stellarium
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/FilterDP.png}
+    \caption{Connecting the filter wheel. Select 'Filter Wheel' on the equipment tab, then connect the the wheel using the on/off button.
+    }
+    \label{fig:NINA:Filter Connection}
+\end{figure}
 
-Preview of FOV in Stellarium
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/TelescopeDP.png}
+    \caption{Connecting the telescope. Select 'Telescope' on the equipment tab, then connect the telescope using the on/off button. After the connection has been made, the mount must be unparked from home position. Press the "Unpark" button and wait for the telescope to complete the request (trackable by the message at the bottom).
+    }  \label{fig:NINA:Telescope Connection}
+\end{figure}
+% Connect instruments, cool the camera (might have to re-press if it gets stuck) Unpark the mount. TODO DONE
 
-Finding a target, slewing to it
+\subsection{Slewing}\label{sec:NINA:slewing}
 
-\subsection{Slewing}
+In order to slew to a target, you can first select it in Stellarium. Stellarium also allows for the configuration of the telescope specs, which gives a good preview of the expected field of view. You can set this up by entering the telescope details into the settings of Stellarium (refer to the figures \ref{fig:NINA:choose_sensor_final} and \ref{fig:NINA:gear_selection_final}). If the right telescope and CCD sensor do not exist, you can manually enter them by clicking on 4. in \ref{fig:NINA:choose_sensor_final} and adding the two new devices with the data given by the left two images of \ref{fig:NINA:gear_selection_final}. Clicking on 3. (in \ref{fig:NINA:choose_sensor_final}) allows you to select the telescope (1.) and the sensor (2.).
 
-Slewing does not work (is greyed out) while the camera is taking exposures.
-Stop the camera first.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/NINA/choose_sensor_final.PNG}
+    \caption{Select a telescope and a sensor (CCD camera) option in Stellarium.}
+    \label{fig:NINA:choose_sensor_final}
+\end{figure}
 
-\subsection{Imaging}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/NINA/gear_selection_final.png}
+    \caption{Configurations for telescope and CCD setup (left two). The right image shows the view for the in 1. and 2. of \ref{fig:NINA:choose_sensor_final} selected setup.}
+    \label{fig:NINA:gear_selection_final}
+\end{figure}
 
-Imaging does not work (is greyed out) while the camera is slewing.
-Slew to the target first.
+When you have made your target selection in Stellarium, you can directly import the coordinates and object information into N.I.N.A. In the 'Framing' tab on the left, click the import button to load the information and then press select 'Slew' from the 'Slew and center' drop-down menu to slew the telescope to the object. Make sure to wait until the slewing is complete to take images.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/ImportAndSlew.png}
+    \caption{Importing object information from Stellarium and slewing. In the 'Framing' tab on the left, import the currently selected object from Stellarium. Afterwards, select 'Slew' from the 'Center and Slew' drop-down menu to slew the telescope to the target object.}
+    \label{fig:NINA:ImportAndSlew}
+\end{figure}
+
+Keep in mind that slewing does not work (is greyed out) while the camera is taking exposures. Stop the camera first.
+Similarly, you cannot take images while the telescope is still slewing.
+
+%\subsection{Imaging}
+
+\subsection{Single image exposure}\label{sec:NINA:single_image_exposure}
+To take a single image, you first need to navigate to the 'Imaging' tab on the left. 
+There are four parameters you should know for your exposures:
+\begin{itemize}
+    \item \texttt{Exposure time}: the duration the CCD should be exposed to the incoming light.
+    \item \texttt{Filter}: The bandwidth filter which to use, i. e. which part of the spectrum you want to capture.
+    \item \texttt{Binning}: How many pixels should be averaged to compress the image (e. g. 2x2 averages each 2x2 square to one output pixel).
+    \item \texttt{Loop}: Whether you want to take a single exposure or loop several after one another.
+    \item \texttt{Save}: Whether you would like to save the resulting images (as FITS files).
+    \item \texttt{Enable sub-sampling}: Whether to take individual exposures of parts of the detector. This is usually not needed for the experiments and is disabled by default.
+\end{itemize}
+If you do not know the ideal exposure time based on signal-gain ratio, there is a built-in tool: In the navigation bar on the bottom, click on 'Optimal Exposure Calculator'. Then, set the 'Exposure time' field appropriately. You might need to test a few values here based on the object, since too short of an exposure will not yield enough signal and too long could over-saturate the detector, falsifying the results. Do not change the other values in the calculator. Start the computation by clicking on the large shutter button.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/ExposureCalculator.png}
+    \caption{How to use the exposure time calculator. First, open it by using the lower navigation bar. Enter a trial exposure time and click on the shutter to compute the ideal exposure time. If the result seems off, the detector could be over- or under-saturated. Try varying the trial exposure.}
+    \label{fig:NINA:ExposureCalculator}
+\end{figure}
+
+To start an exposure, use the 'Imaging' panel with the shutter button on the top-right of the screen. After setting up the aforementioned values in their respective fields, click on the small shutter button to start the exposure. When an image is ready, you can view it by clicking on the 'Image' button on the lower navigation bar. If you enable the 'Save' option in your imaging setup, all images will be stored as FITS files inside the 'Data' folder on the desktop, categorized by date and then by filter.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/SingleExposure.png}
+    \caption{Taking a simple exposure. First, setup your exposure by modifying the data fields in the 'Imaging' panel. Start the exposure by clicking the shutter button. When an image is ready, you can view it by navigating to 'Image' on the lower navigation bar. This also allows you to see details like the individual pixel counts.}
+    \label{fig:NINA:SingleExposure}
+\end{figure}
+
+
+\subsection{Sequencer}
+
+Setting up a sequence allows you to take multiple images with possibly different filters or exposure times automatically, without having to take every single frame individually as in \ref{sec:NINA:single_image_exposure}. 
+
+The simplest way is to set up a sequence that consists of only one object using one filter and exposure time. If you want to use multiple filters or exposure times, you can just repeat the following instructions. This adds multiple different sequences grouped by objects (see ``\texttt{M101}'' in figure \ref{fig:NINA:configure_sequence_edited}), which are run through one after the other once everything is started.
+
+The first step is to import an object into \texttt{N.I.N.A.} and to slew to it as described in \ref{sec:NINA:slewing}. Alternatively, you can also select an object by name if it is correctly entered into 1. of \ref{fig:NINA:add_to_sequence_edited}. Now, instead of switching to the \texttt{Imaging} tab, click on the little arrow 2. in \ref{fig:NINA:add_to_sequence_edited} and select 3., the \texttt{Legacy Sequencer}. This adds your object to a new and not yet configured sequence and opens a new tab. If the tab does not open, click on the \texttt{Sequencer} tab in the left vertical bar.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/add_to_sequence_edited.png}
+    \caption{Steps to add an object that was selected e.g. using \texttt{Stellarium} to a sequence using the \texttt{Legacy Sequencer}.}
+    \label{fig:NINA:add_to_sequence_edited}
+\end{figure}
+
+The next step is to configure the sequence with the obeject that was just added. There are a few basic steps and possible options that are outlined in the following list. Each list item corresponds to the number as written in figure \ref{fig:NINA:configure_sequence_edited}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/configure_sequence_edited.png}
+    \caption{Steps to configure a sequence if the object was already added as a \texttt{Legacy Sequence}.}
+    \label{fig:NINA:configure_sequence_edited}
+\end{figure}
+
+\begin{enumerate}
+    \item This field allows you to give a time the CCD needs to read out the image. The usual value for the current camera (June 2023) is $13\,\si{\second}$. This allows for a more accurate ETA estimation.
+    \item This is the name you want to give this object. The standard value is its catalogue name. This mainly determines the name of the folder that will be created in which all exposures will be saved. The saves are sorted by type, then filter and then contain the exposure time and numeration in the title.
+    \item This field gives you the number of frame already saved once the sequence is started. This field is not important during setup.
+    \item Here you select the number of frames to be taken using the following specifications.
+    \item Here you simply select the exposure time (that you either calculated using SNR or using the optimal exposure calculator that is located in the \texttt{Imaging} tab).
+    \item Here you select your frame type. \texttt{LIGHT} are normal exposures of your object. \texttt{FLAT}, \texttt{DARK}, \texttt{BIAS} and \texttt{DARKFLAT} are your calibration frames (if you take them manually without using the \texttt{FLAT Wizard}). \texttt{SNAPSHOT} are test frames that you might want to save but not use in you final result.
+    \item Here you select your filter (R - red, G - green, B - blue, L - luminance, Ha - $H_\alpha$ band filter). If your filterwheel is currently at a different position, the sequence will automatically switch it.
+    \item Activate dither to minimally change the position of the telescope every view frames. This allows e.g. to later correct for broken pixel columns using for example sigma clipping.
+    \item Here you can enter after how many frames the telescope is supposed to slightly change its position (``dither''). 
+\end{enumerate}
+If everything was set to your will, you can click on 10. in \ref{fig:NINA:configure_sequence_edited} to start the sequence.
+
+
 
 \subsection{Focus}
 
-TODO add where to find the focus tab, and what to do if it is hidden.
+In order to access focus settings, click on the \texttt{Imaging} section located on the left vertical selection bar (see 1. in figure \ref{fig:NINA:focusing_tab}). If the square containing the focus parabola is not visible, click on symbol 2. in \ref{fig:NINA:focusing_tab} to open it. 
 
-TODO how to manually go to a fixed focus position
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/focusing_tab.png}
+    \caption{Focus menu (top right box) in N.I.N.A.'s imaging section.}
+    \label{fig:NINA:focusing_tab}
+\end{figure} % TODO add where to find the focus tab, and what to do if it is hidden.
+
+% TODO how to manually go to a fixed focus position
+The telescopes focus is controlled via a focuser that can also be connected in the \texttt{Equipment} tab, there you can insert a manual focus position, which corresponds to the $x$-axis in the focus tab in \ref{fig:NINA:focusing_tab}. This is (as well as the step before) is usually not necessary, if the TA did not specifically request it or one of the conditions in the following apply. 
 
 The focuser position is displayed in micrometers.
 Usually, focus is between 10000 and 15000 micrometers.
@@ -884,9 +999,7 @@ There are several scenarios where changing the focus is necessary:
     \item
           Autofocus has not been performed for a while (a few weeks), and the position has slowly drifted away
     \item
-          The filter of the filter wheel is changed. (This is automatically compensated by N.
-          I.N.A.
-          by moving the focusser by a known offsets each time the filter is changed.)
+          The filter of the filter wheel is changed. (This is automatically compensated by N.I.N.A. by moving the focusser by a known offsets each time the filter is changed.)
 \end{itemize}
 
 It is very good practice to perform an autofocus before beginning an observing night.
@@ -903,21 +1016,19 @@ To perform an autofocus:
               The algorithm is usually quite resilient and can deal with some disturbances, such as saturated stars, galaxies, nebulae etc. Just make sure that the star is not so bright that it covers a large fraction of the sensor.
           }
     \item
-          Take a test expsoure in the L filter with an exposure time of 3 seconds.
+          Take a test exposure in the L filter with an exposure time of 3 seconds.
     \item
           Check that there are many separate stars visible in the picture.
           Stars that are very faint, saturated, or not well separated cannot be used for autofocussing.
           \footnote{To check the brightness of a star, hover over the image, and hold right click.
-              This will open a small windowd that shows some statistics in a small area around the cursor.
+              This will open a small window that shows some statistics in a small area around the cursor.
           }
           \begin{itemize}
               \item
                     If the image is already strongly out of focus, (e.g. you see donut rings instead of stars, or no stars at all), try to manually find a position between 10000 and 15000 where stars are nicely visible.
           \end{itemize}
     \item
-          (Optional) Check the autofocus settings in N.
-          I.N.A.
-          under \texttt{Settings -> Autofocus}.
+          (Optional) Check the autofocus settings in N.I.N.A. under \texttt{Settings -> Autofocus}.
           Adjust the parameters only if something does not work.
     \item
           In the Imaging tab, click \texttt{Autofocus}.
@@ -933,9 +1044,29 @@ The autofocus procedure will move the focusser to a range of focus positions, ta
 The lower the \textsc{hfr}, the smaller the stars, and the better the focus.
 For a successful autofocus, the measurement of \textsc{hfr} as a function of focusser position is a hyperbola.
 
-An excellent focus will have a \textsc{hfr} of about 2, an acceptable one about 3, and a terrible one about 5.
+An excellent focus will have a \textsc{hfr} of about 2, an acceptable one about 3, and a terrible one about 5. A nice example of such an parabola can be seen on the right side of figure \ref{fig:NINA:focusing_tab}.  % DONE Add an image of a nice focus hyperbola here.
 
-TODO Add an image of a nice focus hyperbola here.
+
+\subsubsection*{Default settings} % Something else? I think that might be enough...
+
+Here are some useful default settings when conducting the autofocus procedure:
+
+\begin{itemize}
+    \item The correct focus is usually around 12500.
+          It can be from 10000 to 15000.
+    \item
+          To get a good range of focus positions, aim for going
+          from a decent starting focus position up to about +- 1500 away from the starting position.
+          This should give an HFR at about 5 to 10 at the bad ends, and a good focus in the middle.
+          \begin{itemize}
+              \item
+                    A good setting is: set step size of 300, 5 steps either way, and start at
+                    around 12500.
+                    A good exposure time is a few seconds, depending on filter and field.
+                    The step size can be reduced if you think you are already close to good focus
+          \end{itemize}
+\end{itemize}
+
 
 \subsubsection*{Troubleshooting}
 If the procedure does not work, first look at the focus curve that has been generated.
@@ -983,27 +1114,6 @@ This is usually just a calibration error.
 Recalibrate the focusser by opening the \texttt{PWI3} software, going to \text{Focus -> Find Home}.
 Note that the correct focus position may change significantly after performing the calibration.
 
-\subsubsection*{Default settings}
-Here are the default settings of the autofocus procedure:
-
-TODO
-
-\begin{itemize}
-    \item The correct focus is usually around 12500.
-          It can be from 10000 to 15000.
-    \item
-          To get a good range of focus positions, aim for going
-          from a decent starting focus position up to about +- 1500 away from the starting position.
-          This should give an HFR at about 5 to 10 at the bad ends, and a good focus in the middle.
-          \begin{itemize}
-              \item
-                    A good setting is: set step size of 300, 5 steps either way, and start at
-                    around 12500.
-                    A good exposure time is a few seconds, depending on filter and field.
-                    The step size can be reduced if you think you are already close to good focus
-          \end{itemize}
-\end{itemize}
-
 \subsection{Autoguiding}
 
 \begin{figure}
@@ -1015,11 +1125,44 @@ TODO
     \label{finder}
 \end{figure}
 
-Add here: Stellarium screenshot of guider position and settings.
+
+% Add here: Stellarium screenshot of guider position and settings. maybe reference \ref{fig:NINA:}
 
 To guide with the dual-chip guider using the Ha filter, which is the most challenging filter to guide with, use a guide star that is magnitude 11 or brighter to get an SNR of 15 with a guider exposure time of 15 seconds.
 
 Move the FOV around in stellarium until you have such a guide star in the rectangle of the guider
+
+
+\subsection{N.I.N.A. troubleshooting}
+
+\paragraph*{Camera connection failed.} It can happen that the camera won't connect or show up while trying to connect. In that case, try to restart it by pulling its power cord and putting it back in. If this does not work, it might be broken and you have to contact the TA.
+
+\paragraph*{All devices/presets are missing.} If you open N.I.N.A. and it looks like it is newly installed or has a different color scheme, it is possible that e.g. an update caused a different/default program configuration to be loaded. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/NINA/change_profile_edited.png}
+    \caption{N.I.N.A. profile selection tab. The profile contains presets for loadable devices as well as lastly used focus values or filter configurations.}
+    \label{fig:NINA:change_profile_edited}
+\end{figure}
+
+In order to select the right profile, make sure that all devices are disconnected. Then click on  \texttt{Options -> General} on the left bar. There you can select the right profile (as of June 2023) as displayed in 1. of \ref{fig:NINA:change_profile_edited}. If all devices are disconnected, you can then click on \texttt{Load profile} (2.) and the program will restart with the correct presets.
+
+
+
+\subsection{Turn-off}
+
+After usage, do not just leave the equipment, but turn everything off properly. In order to do so, you can follow the following steps. The terminology used is the same as in \ref{sec:NINA:start-up}. After making sure that every sequence is finished and changing to the \texttt{Equipment} tab on the left selection bar:
+
+\begin{itemize}
+    \item Select \texttt{Park} on the \texttt{Telescope} tab and wait until the telescope is done parking. You can verify that it is parked by looking outside or by noticing that ``\textit{Waiting for telescope to park}'' on the bottom left on the screen is not there anymore. Once it is parked, you can disconnect it by clicking on the disconnect button (such as 1. in figure \ref{fig:NINA:Telescope Connection}).
+    \item Now click on \texttt{Filter Wheel} and disconnect it directly by clicking the disconnect button.
+    \item Finally, click on \texttt{Camera}. First you have to turn off cooling by clicking on \texttt{Cancel} if it is active. Now wait until the telescope is again above $0\,\si{\degreeCelsius}$. If you want to speed up the process, activate \texttt{Warming} (and deactivate it once it is above $0\,\si{\degreeCelsius}$). Then you can disconnect the camera.
+\end{itemize}
+
+After everything is disconnected, you can simply close the program and shut down the computer(s). Now you can turn off the power to the hardware.
+
+
 
 \section{PWI3: Heater and fans}
 \texttt{PWI3} is usually only used for maintenance operations and can be ignored during normal imaging.
@@ -1927,129 +2070,129 @@ Phoutils: DOI 10.5281/zenodo.1340699
 
 Credits and many thanks to Stuart Littlefair \url{http://slittlefair.staff.shef.ac.uk}.
 
-\chapter{Photometric calibration}
+% \chapter{Photometric calibration}
 
-Often, we want to measure the brightness of an object in some standardised system, for example the luminosity in Watts, so that we can compare it to other known objects, and previous measurements by other observers.
+% Often, we want to measure the brightness of an object in some standardised system, for example the luminosity in Watts, so that we can compare it to other known objects, and previous measurements by other observers.
 
-For this chapter, we assume that we measure only in a single wavelength band, i.e. with a single filter. If multiple filters are used, the procedure has to be repeated for each filter.
-
-
-\section*{Theory: Units of brightness}
-
-\paragraph*{Analog-to-digital-units}
-What we measure is the number of counts $N_\text{\textsc{adu}}$ that are registered on the sensor in each pixel during an exposure.
-They depend on the observing conditions, the telescope used, the quantum efficiency of the sensor, the spectrum of the light, and many other factors.
-Before we can extract useful quantities, we have to perform calibrations.
-
-\paragraph*{Photons}
-Using the specification for the gain of the camera, which is $g = \SI{1.27}{\electron}/\text{\textsc{adu}}$ as shown in \cref{tab:specs-camera}, we can determine how many electrons $N_e$ this corresponds to using
-\begin{align*}
-    N_e = g N_\text{\textsc{adu}}.
-\end{align*}
-The number of photons that have been registered on the detector is equal to the number of electrons, so we usually use $N_e$ as a proxy for photons as well.
-
-\paragraph*{Instrumental magnitude}
-The instrumental magnitude $m_\text{inst}$ of an object is a unitless quantity defined as
-\begin{align*}
-    m_\text{inst} = − 2.5 \log(N_e/t),
-\end{align*}
-where $t$ is the exposure time of the image.
-As the name suggests, the instrumental magnitude still depends on the specific instrument used to observe a target.
-
-\paragraph*{Apparent magnitude}
-The apparent magnitude $m$ of an object is a unitless quantity defined as
-\begin{align*}
-    m = - 2.5 \log(F/F_0),
-\end{align*}
-where $F$ is the flux of an object that reaches Earth, and $F_0$ is the flux of Vega, observed through the same filter.
-We can see that magnitudes are a measurement system for ratios: A star that appears 100 times dimmer than Vega has a magnitude of $- 2.5 \log(1/100) = 5$.
-To get from the instrumental magnitude to the apparent magnitude, we have to perform photometric calibration with photometric standard stars, TODO see later.
-
-\paragraph*{Absolute magnitude}
-The absolute magnitude $m$ of an object is a unitless quantity defined as
-\begin{align*}
-    M = m - 5 \log(d/\text{pc}) + 5,
-\end{align*}
-where $d$ is the distance from the observer to the object, and a \si{\parsec}, short for parsec, is a unit of distance.
-
-In other words, the absolute magnitude of an object is the apparent magnitude it would have if we brought it to a distance of \SI{10}{\parsec}, where the term $- 5 \log(d/\text{pc}) + 5$ evaluates to zero.
-
-\paragraph*{Flux}
-
-\paragraph*{Luminosity}
+% For this chapter, we assume that we measure only in a single wavelength band, i.e. with a single filter. If multiple filters are used, the procedure has to be repeated for each filter.
 
 
+% \section*{Theory: Units of brightness}
+
+% \paragraph*{Analog-to-digital-units}
+% What we measure is the number of counts $N_\text{\textsc{adu}}$ that are registered on the sensor in each pixel during an exposure.
+% They depend on the observing conditions, the telescope used, the quantum efficiency of the sensor, the spectrum of the light, and many other factors.
+% Before we can extract useful quantities, we have to perform calibrations.
+
+% \paragraph*{Photons}
+% Using the specification for the gain of the camera, which is $g = \SI{1.27}{\electron}/\text{\textsc{adu}}$ as shown in \cref{tab:specs-camera}, we can determine how many electrons $N_e$ this corresponds to using
+% \begin{align*}
+%     N_e = g N_\text{\textsc{adu}}.
+% \end{align*}
+% The number of photons that have been registered on the detector is equal to the number of electrons, so we usually use $N_e$ as a proxy for photons as well.
+
+% \paragraph*{Instrumental magnitude}
+% The instrumental magnitude $m_\text{inst}$ of an object is a unitless quantity defined as
+% \begin{align*}
+%     m_\text{inst} = − 2.5 \log(N_e/t),
+% \end{align*}
+% where $t$ is the exposure time of the image.
+% As the name suggests, the instrumental magnitude still depends on the specific instrument used to observe a target.
+
+% \paragraph*{Apparent magnitude}
+% The apparent magnitude $m$ of an object is a unitless quantity defined as
+% \begin{align*}
+%     m = - 2.5 \log(F/F_0),
+% \end{align*}
+% where $F$ is the flux of an object that reaches Earth, and $F_0$ is the flux of Vega, observed through the same filter.
+% We can see that magnitudes are a measurement system for ratios: A star that appears 100 times dimmer than Vega has a magnitude of $- 2.5 \log(1/100) = 5$.
+% To get from the instrumental magnitude to the apparent magnitude, we have to perform photometric calibration with photometric standard stars, TODO see later.
+
+% \paragraph*{Absolute magnitude}
+% The absolute magnitude $m$ of an object is a unitless quantity defined as
+% \begin{align*}
+%     M = m - 5 \log(d/\text{pc}) + 5,
+% \end{align*}
+% where $d$ is the distance from the observer to the object, and a \si{\parsec}, short for parsec, is a unit of distance.
+
+% In other words, the absolute magnitude of an object is the apparent magnitude it would have if we brought it to a distance of \SI{10}{\parsec}, where the term $- 5 \log(d/\text{pc}) + 5$ evaluates to zero.
+
+% \paragraph*{Flux}
+
+% \paragraph*{Luminosity}
 
 
-\begin{table}
-    \centering
-    \begin{tabular}{llll}
-        \toprule
-        Quantity & Symbol & Unit & Defining equation\\
-        \midrule
-        \textsc{Adu} rate & $N_\text{\textsc{adu}}/t$ & \si{\per\second} & \\
-        Electron rate & $N_e/t$ & \si{\per\second} & \\
-        Instrumental magnitude & $m_\text{inst}$ & unitless & $m_\text{inst} = − 2.5 \log(N_e/t)$\\
-        (Apparent) magnitude & $m$ & unitless &  $m = - 2.5 \log(F/F_0)$\\
-        Absolute magnitude & $M$ & unitless & $M = m - 5 \log(d/\text{pc}) + 5$ \\
-        Flux & $F$ & \si{\watt\per\meter\squared} & \\
-        Luminosity & $L$ & \si{\watt} & $L = 4 \pi d^2 F$ \\
-        \bottomrule 
-    \end{tabular}
-    \caption{Common methods to state brightness, and their defining equations. Quantities: $d$ is the distance between the object and the observer.}
-    \label{tab:brightness-quantities}
-\end{table}
 
-\section{Step-by-step calibration}
 
-We have corrected our science frames with dark frames and flat frames, we have subtracted the background from each corrected frame, and we have aligned and stacked them into one final image of our target.
+% \begin{table}
+%     \centering
+%     \begin{tabular}{llll}
+%         \toprule
+%         Quantity & Symbol & Unit & Defining equation\\
+%         \midrule
+%         \textsc{Adu} rate & $N_\text{\textsc{adu}}/t$ & \si{\per\second} & \\
+%         Electron rate & $N_e/t$ & \si{\per\second} & \\
+%         Instrumental magnitude & $m_\text{inst}$ & unitless & $m_\text{inst} = − 2.5 \log(N_e/t)$\\
+%         (Apparent) magnitude & $m$ & unitless &  $m = - 2.5 \log(F/F_0)$\\
+%         Absolute magnitude & $M$ & unitless & $M = m - 5 \log(d/\text{pc}) + 5$ \\
+%         Flux & $F$ & \si{\watt\per\meter\squared} & \\
+%         Luminosity & $L$ & \si{\watt} & $L = 4 \pi d^2 F$ \\
+%         \bottomrule 
+%     \end{tabular}
+%     \caption{Common methods to state brightness, and their defining equations. Quantities: $d$ is the distance between the object and the observer.}
+%     \label{tab:brightness-quantities}
+% \end{table}
 
-To perform photometric calibration, we need observations of two targets: The actual target we want to measure the brightness of, and a reference target, usually a standard star.
+% \section{Step-by-step calibration}
 
-The rough plan is the following: Count how many electrons are registered on the sensor per second from the standard star, and look up the apparent magnitude of the standard star from a table -- this gives us a conversion between electrons per second and apparent magnitude.
-We then count how many electrons arrive per second from our unknown target, and use the conversion factor to derive the apparent magnitude of the target.
-After that, getting absolute magnitude, flux, and luminosity is just plugging in into some equations.
+% We have corrected our science frames with dark frames and flat frames, we have subtracted the background from each corrected frame, and we have aligned and stacked them into one final image of our target.
 
-\paragraph*{Magnitude zero point}
-Look up the magnitude of the standard star $m$ in the filter you are observing in from a table.
-Calculate the instrumental magnitude of the reference star using
-\begin{align*}
-    m_\text{inst} = − 2.5 \log(N_e/t).
-\end{align*}
-Then, the magnitude-zero point of $m_\text{zp}$ of the image results from
-\begin{align*}
-    m = m_\text{inst} + m_\text{zp}.
-\end{align*}
-The idea: The magnitude zero point is approximately the same if the reference star and the target are observed at a similar time, at a similar region of the sky, with the same instrument.
-So we can reuse $m_\text{zp}$ for the image of the target as well!
+% To perform photometric calibration, we need observations of two targets: The actual target we want to measure the brightness of, and a reference target, usually a standard star.
 
-\paragraph*{Apparent magnitude of the target}
-Assume we have counted the electron rate $N_e/t$ of the target.
-Then we get the apparent magnitude of the target using again
-\begin{align*}
-    m = m_\text{inst} + m_\text{zp},
-\end{align*}
-where this time $m$ is the unknown, and the other two are known.
+% The rough plan is the following: Count how many electrons are registered on the sensor per second from the standard star, and look up the apparent magnitude of the standard star from a table -- this gives us a conversion between electrons per second and apparent magnitude.
+% We then count how many electrons arrive per second from our unknown target, and use the conversion factor to derive the apparent magnitude of the target.
+% After that, getting absolute magnitude, flux, and luminosity is just plugging in into some equations.
 
-\paragraph*{Flux}
+% \paragraph*{Magnitude zero point}
+% Look up the magnitude of the standard star $m$ in the filter you are observing in from a table.
+% Calculate the instrumental magnitude of the reference star using
+% \begin{align*}
+%     m_\text{inst} = − 2.5 \log(N_e/t).
+% \end{align*}
+% Then, the magnitude-zero point of $m_\text{zp}$ of the image results from
+% \begin{align*}
+%     m = m_\text{inst} + m_\text{zp}.
+% \end{align*}
+% The idea: The magnitude zero point is approximately the same if the reference star and the target are observed at a similar time, at a similar region of the sky, with the same instrument.
+% So we can reuse $m_\text{zp}$ for the image of the target as well!
 
-\begin{table}
-    \centering
-    \sisetup{per-mode=reciprocal}
-    \begin{tabular}{lSSSSS}
-        \toprule
-        & {U} & {B} & {V} & {R} & {I}\\
-        \midrule
-        $\lambda_\text{eff}/\si{\nm}$ & 366 & 483 & 545 & 641 & 798\\
-        $\Delta \lambda/\si{\nm}$ & 60 & 90 & 85 & 150 & 150\\ 
-        $f_\lambda/(\SI{e-11}{\erg\per\cm\squared\per\angstrom})$ & 417.5 & 632 & 363.1 & 217.7 & 112.6 \\
-        \bottomrule 
-    \end{tabular}
-    \sisetup{per-mode=symbol}
-    \caption{Reference fluxes $F_0$ for common filters, from TODO}
-    % https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1998A%26A...333..231B&defaultprint=YES&filetype=.pdf p244
-    % https://www.astronomy.ohio-state.edu/martini.10/usefuldata.html
-\end{table}
+% \paragraph*{Apparent magnitude of the target}
+% Assume we have counted the electron rate $N_e/t$ of the target.
+% Then we get the apparent magnitude of the target using again
+% \begin{align*}
+%     m = m_\text{inst} + m_\text{zp},
+% \end{align*}
+% where this time $m$ is the unknown, and the other two are known.
+
+% \paragraph*{Flux}
+
+% \begin{table}
+%     \centering
+%     \sisetup{per-mode=reciprocal}
+%     \begin{tabular}{lSSSSS}
+%         \toprule
+%         & {U} & {B} & {V} & {R} & {I}\\
+%         \midrule
+%         $\lambda_\text{eff}/\si{\nm}$ & 366 & 483 & 545 & 641 & 798\\
+%         $\Delta \lambda/\si{\nm}$ & 60 & 90 & 85 & 150 & 150\\ 
+%         $f_\lambda/(\SI{e-11}{\erg\per\cm\squared\per\angstrom})$ & 417.5 & 632 & 363.1 & 217.7 & 112.6 \\
+%         \bottomrule 
+%     \end{tabular}
+%     \sisetup{per-mode=symbol}
+%     \caption{Reference fluxes $F_0$ for common filters, from TODO}
+%     % https://articles.adsabs.harvard.edu/cgi-bin/nph-iarticle_query?1998A%26A...333..231B&defaultprint=YES&filetype=.pdf p244
+%     % https://www.astronomy.ohio-state.edu/martini.10/usefuldata.html
+% \end{table}
 
 \chapter{Spectroscopy}
 
