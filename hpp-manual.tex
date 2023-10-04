@@ -1732,8 +1732,7 @@ An example code for a 1D background subtraction is the following:
     mask = make_source_mask(data, snr=2, npixels=5, dilate_size=11)
     mean, median, std = sigma_clipped_stats(data, sigma=4.0, mask=mask)
     backsub_data = data - mean
-    fits.writeto('path_to_image_backsub.fits', backsub_data, head, 
-    		overwrite=True)
+    fits.writeto('path_to_image_backsub.fits', backsub_data, head, overwrite=True)
 \end{minted}
 
 The background subraction can be performed with IRIS following the section `The final touch' in \url{http://www.astrosurf.com/buil/iris/tutorial2/doc8_us.htm}.
