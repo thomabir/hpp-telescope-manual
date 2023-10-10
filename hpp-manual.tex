@@ -1829,10 +1829,26 @@ There are 3 options to perform this task:
 
 \subsection{Photometric Calibration}
 
-The photometric calibration requires the image of a standard star that has gone through all the data reduction steps we mentioned so far.
-The theory behind the photometric calibration is very well explained in \url{http://slittlefair.staff.shef.ac.uk/teaching/phy241/lectures/L07/index.html}.
-Since you need to perform aperture photometry on your standard stars (or galaxies or HII regions, depending on the experiment), you can use the routines provided by the 'photutils' \software{Python} package \url{https://photutils.readthedocs.io/en/stable/aperture.html}.
-By following the two tutorials, it should be quite straightforward to obtain the magnitude zero-point of the image.
+The photometric zero-point $m_\text{ZP}$ of an image is defined as
+\begin{equation}
+    \label{eq:magnitude-zero-point}
+    m = -2.5 \log_{10} \left( \frac{N}{t} \right) + m_\text{ZP},
+\end{equation}
+where $N$ is the number of counts (either photons or ADUs) of a source, $t$ is the exposure time, $m$ is the apparent magnitude of the source, and $m_\text{ZP}$ is the photometric zero-point of the image.
+Here, it does not matter whether one uses ADUs or photons for $N$, as long as the same units are used for both the unkown source and the standard star.
+
+
+
+Photometric calibration involves two steps:
+
+First, a standard star with known magnitude $m$ is observed, and the number of counts $N$ is measured. Then, $m_\text{ZP}$ can be computed from \cref{eq:magnitude-zero-point}.
+
+Then, a source with unknown magnitude $m$ is observed, and its number of counts $N$ is measured. Using the magnitude zero-point calculated before, the apparent magnitude $m$ of the source can be computed using again \cref{eq:magnitude-zero-point}.
+
+In order for this to work, the standard star should be close to the source of unknown magnitude, ideally in the same image.
+If this is not possible, then the standard star can be observed in a different image, but the atmospheric conditions should be the same as for the image of the source, so the altitude above the horizon should be similar.
+
+
 
 \subsection{Seeing Estimate}
 
