@@ -268,6 +268,8 @@
     \endgroup}
 \makeatother
 
+\usepackage[perpage]{footmisc} % reset footnote counter per page
+
 \usepackage[
     colorlinks=true,
     linkcolor=black,
@@ -1842,7 +1844,7 @@ Here, it does not matter whether one uses ADUs or photons for $N$, as long as th
 Photometric calibration involves two steps:
 
 First, a standard star with known magnitude $m$ is observed, and the number of counts $N$ is measured. Then, $m_\text{ZP}$ can be computed from \cref{eq:magnitude-zero-point}.
-To measure the number of counts in a region, you can use \texttt{astropy}'s \texttt{photutils}\footnote{https://photutils.readthedocs.io/en/stable/aperture.html} package.
+To measure the number of counts in a region, you can use \texttt{astropy}'s \texttt{photutils}\footnote{\url{https://photutils.readthedocs.io/en/stable/aperture.html}} package.
 
 Then, a source with unknown magnitude $m$ is observed, and its number of counts $N$ is measured. Using the magnitude zero-point calculated before, the apparent magnitude $m$ of the source can be computed using again \cref{eq:magnitude-zero-point}.
 
