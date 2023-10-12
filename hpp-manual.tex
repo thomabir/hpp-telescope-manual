@@ -1842,11 +1842,12 @@ Here, it does not matter whether one uses ADUs or photons for $N$, as long as th
 Photometric calibration involves two steps:
 
 First, a standard star with known magnitude $m$ is observed, and the number of counts $N$ is measured. Then, $m_\text{ZP}$ can be computed from \cref{eq:magnitude-zero-point}.
+To measure the number of counts in a region, you can use \texttt{astropy}'s \texttt{photutils}\footnote{https://photutils.readthedocs.io/en/stable/aperture.html} package.
 
 Then, a source with unknown magnitude $m$ is observed, and its number of counts $N$ is measured. Using the magnitude zero-point calculated before, the apparent magnitude $m$ of the source can be computed using again \cref{eq:magnitude-zero-point}.
 
 In order for this to work, the standard star should be close to the source of unknown magnitude, ideally in the same image.
-If this is not possible, then the standard star can be observed in a different image, but the atmospheric conditions should be the same as for the image of the source, so the altitude above the horizon should be similar.
+If this is not possible, then the standard star can be observed in a different image, but the atmospheric conditions should be the same as for the image of the source, so the altitude above the horizon and the time of observation should be close.
 
 
 
