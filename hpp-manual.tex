@@ -443,7 +443,8 @@ Current contact for the telescope: \url{thomabir@phys.ethz.ch}
         Power supply                      & \SI{12}{\volt} \textsc{dc} at \SI{9.5}{\ampere}                            \\
         \bottomrule
     \end{tabular}
-    \caption{Specifications of the camera} \label{tab:specs-camera}
+    \caption{Specifications of the camera.}
+    \label{tab:specs-camera}
 \end{table}
 
 \clearpage
@@ -1539,56 +1540,46 @@ The webcam is also connected by the \textbf{Observatory} window (e.g. see \cref{
 
 \part{Data analysis}
 
-\chapter{Data Reduction}
+\chapter{Data analysis}
 
-Based on version 1.1 of the manual by Luca Tortorelli\autocite{Tortorelli2015_DataReduction}.
-This part of the manual is intended to give a brief overview on how to go from the raw images to the fully astrometrically and photometrically calibrated ones.
+This chapter, based on version 1.1 of the manual by Luca Tortorelli\autocite{Tortorelli2015_DataReduction}, gives an overview on how to go from the raw images to the fully calibrated ones.
 
 \section{Software installation}
+It is recommended to install \software{Python} for the data analysis, and \software{DS9} to view \texttt{FITS} images.
+We provide instructions for \texttt{Linux} and \texttt{macOS}.
+If you use \texttt{Windows}, you can try the same instructions in the \texttt{Windows Subsystem for Linux} (WSL), but we do not test it.
 
-The data reduction is performed mostly in \software{Python}, but additional software may be required such as \software{ds9}, \software{Source Extractor}, \software{SCAMP}, \software{SWARP} and/or \software{DeepSkyStacker} and \software{IRIS} (the last two if you use Windows).
+
+Additional software that can be useful are \software{Source Extractor}, \software{SCAMP}, and \software{SWARP}.
+
+\subsection{Python}
+We assume you already have a \texttt{Python 3} installation. In addition, we require the following packages:
+\begin{minted}{bash}
+    pip install astropy numpy scipy matplotlib
+\end{minted}
 
 
 \subsection{DS9}
 
-DS9 displays FITS images and it can be download and installed for all the platforms from \url{http://ds9.si.edu/site/Download.html}.
+\texttt{DS9} displays \texttt{FITS} images and can be installed from its website\footnote{\texttt{DS9}: \url{https://sites.google.com/cfa.harvard.edu/saoimageds9/home}}.
+If you use macOS, I recommend using the \enquote{Aqua} version.
 
 \subsection{Source Extractor}
 
-\textbf{MacOS} users can easily install Source Extractor with 'brew' or 'Macports'.
-However remember that you must have your virtual environment deactivated when you use 'brew' or 'Macports'.
-In your terminal, run
+Source extractor can be used to automatically detect stars in images, and to measure their flux.
+More details can be found in the documentation\footnote{\texttt{Source Extractor}: \url{https://sextractor.readthedocs.io/en/latest/Using.html}}.
+
+\paragraph{macOS}
 \begin{minted}{bash}
-    brew install homebrew/science/sextractor
-\end{minted}
-or
-\begin{minted}{bash}
-    brew install brewsci/science/sextractor
-\end{minted}
-since sometimes packages change directory.
-If you want to install it with Macports, then first you have to install it according to your operating system \url{https://www.macports.org/install.php}.
-Then simply type in your terminal:
-\begin{minted}{bash}
-    sudo port install sextractor
+    brew install sextractor
 \end{minted}
 
-For \textbf{Linux} users, the simplest way to have SExtractor up and running is to install the standard binary package the comes with your Linux distribution.
-Run, e.g.,
+\paragraph{Linux}
 \begin{minted}{bash}
-    apt-get sextractor
+    sudo apt install sextractor
 \end{minted}
-(on Debian) or
-\begin{minted}{bash}
-    dnf sextractor
-\end{minted}
-(on Fedora) as root and SExtractor, as well as all its dependencies, will automatically be installed.
-Alternatively, you can follow the instructions at \url{https://sextractor.readthedocs.io/en/latest/Installing.html}.
 
-Source Extractor can't be installed on \textbf{Windows}.
-In Windows 10, however, you can activate the Unix terminal.
-Maybe there it works, but I have never tested it.
 
-The instructions on how to use it are at \url{https://sextractor.readthedocs.io/en/latest/Using.html}.
 
 \subsection{SCAMP}
 
@@ -1604,9 +1595,6 @@ in your terminal window.
 
 \textbf{Linux} users have to follow the instructions on the website \url{https://scamp.readthedocs.io/en/latest/Installing.html}.
 
-SCAMP can't be installed on \textbf{Windows}.
-In Windows 10, however, you can activate the Unix terminal.
-Maybe there it works, but I have never tested it.
 
 \subsection{SWARP}
 
@@ -1619,29 +1607,39 @@ in your terminal window.
 
 \textbf{Linux} users have to follow the instructions on the website \url{https://www.astromatic.net/software/swarp}.
 
-SWARP can't be installed on \textbf{Windows}.
-In Windows 10, however, you can activate the Unix terminal.
-Maybe there it works, but I have never tested it.
-
-\subsection{DeepSkyStacker}
-
-DeepSkyStacker performs the same steps as SWARP, but with a graphical interface.
-It works only on \textbf{Windows} (Mac or Linux users may try using it via Wine) and it can be downloaded at \url{http://deepskystacker.free.fr/english/index.html}.
-The website containes several tutorials on how to use it.
-
-\subsection{IRIS}
-
-IRIS is an astronomical images processing software that works under Windows OS.
-It can be used to perform the analysis steps highlighted in Section \ref{section:data_red_steps}.
-The website to download it is \url{http://www.astrosurf.com/buil/iris-software.html}.
-This page contains several tutorials on how to use it for different astronomical applications.
 
 \section{Data Reduction Steps}
 \label{section:data_red_steps}
 
-In this section we go through the different data reduction steps, with some example code on how to perform the different tasks.
-The code can be run either in the terminal or inside a Jupyter notebook.
-Some glossary: 'raw science frame' refers to a single exposure image of the target galaxy or star without any post-processing applied to it, i.e. as it is taken at the telescope; 'dark for flat' refers to a dark image taken with the same exposure time as the single flat field image, while 'dark for science' refers to a dark image taken with the same exposure time as the 'raw science frame'.
+In this section, we go through the data reduction steps, with some example code on how to perform the different tasks.
+Unless otherwise noted, all code snippets are in \software{Python}.
+
+\begin{important}
+    Go through the steps one by one, as far as they are required for your experiment.
+    After each step, check at least a few images (e.g. in \texttt{DS9}) to make sure that the result is what you expect.
+    Many mistakes can be spotted early that way, and you can save a lot of time.
+\end{important}
+
+\subsection{Reading FITS files}
+
+Images can be read with the \software{astropy} package.
+\begin{minted}{python}
+    from astropy.io import fits
+    data = fits.getdata('path_to_image', ext=0)
+    head = fits.getheader('path_to_image', ext=0)
+\end{minted}
+The code above reads the electronic counts in each pixel and the metadata (header file) of an image.
+Print them to see what information is included.
+
+The \texttt{data} variable contains the image as a 2D \texttt{numpy} array, and mathematical operations can be performed on it:
+\begin{minted}{python}
+    diff = data1 - data2
+\end{minted}
+
+To store a numpy array as a fits file, you can use:
+\begin{minted}{python}
+    fits.writeto('out_image_path', data, head, overwrite=True)
+\end{minted}
 
 \subsection{Dark Subtraction and Flat Fielding Correction}
 
@@ -1652,18 +1650,6 @@ The bias, dark subtraction and the flat fielding correction are applied to the '
 `science frame' refers to the `raw science frame' after bias, dark subtraction and flat fielding correction.
 `master bias' refers to the median image of all the bias frames. 'master dark' refers to the median image of all the 'dark for science' images, the latter being subtracted for the `master bias'. 'master flat' refers to the median image of all the flat images after 'dark for flats' subtraction and `master bias' subtraction. $ \left \langle \mathrm{master\ flat} \right \rangle$ is the mean value of the 'master flat' image.
 
-Images can be read with the \software{astropy} package.
-In the terminal, type
-\begin{minted}{python}
-    from astropy.io import fits
-    data = fits.getdata('path_to_image', ext=0)
-    head = fits.getheader('path_to_image', ext=0)
-\end{minted}
-to get the electronic counts in each pixel and the metadata (header file) of an image.
-The 'data' variable stores the image in the form of a 2D array (i.e. a matrix), therefore operations such as sum, difference, ratio etc. can be done simply as
-\begin{minted}{python}
-    diff = data1 - data2
-\end{minted}
 
 In order to create a median image, you can for example store each 'data' variable for each image as element of a list or create a 3D array having size as the number of images times the number of pixels for each side of the image.
 Then you simply run
@@ -1672,72 +1658,58 @@ Then you simply run
     median_image = np.median(image_list, axis=0)
 \end{minted}
 The variable 'median image' will contain the median of the electronic counts of the different images pixels.
-To create an image that can be displayed also in DS9, run
-\begin{minted}{python}
-    fits.writeto('out_image_path', median_image, head, overwrite=True)
-\end{minted}
+
 
 Once you create the different median images, you can perform the dark subtraction and the flat fielding corrections as in \ref{correction}.
 
-An alternative way of performing this data reduction tasks is by using IRIS.
-One needs to follow the tutorial in \url{http://www.astrosurf.com/buil/iris/tutorial3/doc13_us.htm} adapting it to our case.
-First, select the image file format from the \textit{Settings} command of \textit{File} menu as FIT (see figure 1 in \url{http://www.astrosurf.com/buil/iris/tutorial3/doc13_us.htm}) and set the working path as the one where you store your images.
-Then, you create a master bias, a master dark and a master flat following the sections `Create the master Offset image', `Create the master Dark image', `Create the master Flat-field image' in \url{http://www.astrosurf.com/buil/iris/tutorial3/doc13_us.htm}.
-IRIS allows you also to create a bad pixel map for the image following the section `Create a pixel bad list'.
-The bias, dark subtraction and flat field normalization is performed following the section `Preprocessing' in \url{http://www.astrosurf.com/buil/iris/tutorial3/doc13_us.htm}.
-Further information can be found also in \url{http://www.astrosurf.com/buil/iris/tutorial2/doc8_us.htm} and \url{http://www.astrosurf.com/buil/iris/tutorial2/doc9_us.htm}.
-
 \subsection{Cosmic Ray Rejection}
+Cosmic rays usually appear as single saturated pixels in the image, wheras stars are extended objects.
+Cosmic ray rejection, i.e. the process of automatically detecting and removing cosmic rays, can be performed with Astroscrappy\footnote{\url{https://github.com/astropy/astroscrappy}} or \software{cosmics.py}\footnote{\url{https://obswww.unige.ch/~tewes/cosmics_dot_py/}}.
+Cosmic ray rejection has to be performed for each science image.
 
-The cosmic ray rejection can be performed with Astroscrappy\footnote{\url{https://github.com/astropy/astroscrappy}} or \software{cosmics.py}\footnote{\url{https://obswww.unige.ch/~tewes/cosmics_dot_py/}}.
+You will need the values for gain, saturation, and readout noise of the camera sensor.
+They can be found in \cref{tab:specs-camera} or the datasheet of the camera.
 
 \paragraph{\software{Astroscrappy}}
 The syntax for Astroscrappy is the following:
 \begin{minted}{python}
     from astroscrappy import detect_cosmics
-    from astropy.io import fits
-    data = fits.getdata('path_to_image', ext=0)
-    head = fits.getheader('path_to_image', ext=0)
-    mask, _clean = detect_cosmics(data, inmask=None, sigclip=4.0, sigfrac=0.3, objlim=5.0, gain=1.15, readnoise=6.5, satlevel=65536, pssl=0.0, niter=4, sepmed=True, cleantype='meanmask', fsmode='median', psfmodel='gauss', psffwhm=2.5, psfsize=7, psfk=None, psfbeta=4.765, verbose=False)
-    fits.writeto('path_to_image_cr.fits', _clean, head, overwrite=True)
+    mask, _clean = detect_cosmics(data, inmask=None, sigclip=4.0, sigfrac=0.3, objlim=5.0, gain=1.27, readnoise=9, satlevel=65535, pssl=0.0, niter=4, sepmed=True, cleantype='meanmask', fsmode='median', psfmodel='gauss', psffwhm=2.5, psfsize=7, psfk=None, psfbeta=4.765, verbose=False)
+    fits.writeto('path_to_clean_image.fits', _clean, head, overwrite=True)
 \end{minted}
-The values as just for reference.
-Read the documentation and figure out by yourself the correct ones.
-Gain can be read from the header of each image, while saturation and readout noise can be found in the\textsc{ccd}camera manual.
+The code above is only an example and may have to be modified to your needs.
 
 \paragraph{\software{cosmics.py}}
 \begin{minted}{python}
     import cosmics
-    data = fits.getdata('path_to_image', ext=0)
-    head = fits.getheader('path_to_image', ext=0)
-    c = cosmics.cosmicsimage(gal_raw, gain=1.15, readnoise=0, sigclip = 5.0, sigfrac = 0.3, objlim = 5.0, satlevel=65535)
+    c = cosmics.cosmicsimage(data, gain=1.27, readnoise=9, sigclip = 5.0, sigfrac = 0.3, objlim = 5.0, satlevel=65535)
     c.run(maxiter = 4)
-    cosmics.tofits('path_to_image_clean.fits', c.cleanarray, head)
+    cosmics.tofits('path_to_clean_image.fits', c.cleanarray, head)
 \end{minted}
-The values as just for reference.
-Read the documentation and figure out by yourself the correct ones.
-Gain can be read from the header of each image, while saturation and readout noise can be found in the \textsc{ccd} camera manual.
-
-IRIS performs the same tasks by creating a bad pixel map for the image following the section `Create a pixel bad list' in \url{http://www.astrosurf.com/buil/iris/tutorial3/doc13_us.htm} or following the section `Manual hot-spot removal procedure' in \url{http://www.astrosurf.com/buil/iris/tutorial8/doc23_us.htm}.
+The code above is only an example and may have to be modified to your needs.
 
 \subsection{Background Subtraction}
 
-The background subtraction can be performed using 'phoutils'.
-First you estimate the background following \url{https://photutils.readthedocs.io/en/stable/background.html} for every 'science image'.
-Then you subtract the background image from each science image.
-Have a look at the image after background subtraction, the process is not trivial and you have to play with parameters in order to obtain a good result.
+The background can be caused by light pollution, natural skyglow, moonlight, clouds etc.
+Background subtraction has to be performed for each science image, for example following the \texttt{photutils} tutorial\footnote{\url{https://photutils.readthedocs.io/en/stable/background.html}}.
 
-An example code for a 1D background subtraction is the following:
-\begin{minted}{python}
-    data = fits.getdata('path_to_image', ext=0)
-    head = fits.getheader('path_to_image', ext=0)
-    mask = make_source_mask(data, snr=2, npixels=5, dilate_size=11)
-    mean, median, std = sigma_clipped_stats(data, sigma=4.0, mask=mask)
-    backsub_data = data - mean
-    fits.writeto('path_to_image_backsub.fits', backsub_data, head, overwrite=True)
-\end{minted}
+If your background is constant accross the image, you can follow \enquote{Scalar background and Noise Estimation}.
+If the background is variable accross the image, such as when there is a gradient from moonlight or light pollution, you can follow \enquote{2D Background and Noise Estimation}.
 
-The background subraction can be performed with IRIS following the section `The final touch' in \url{http://www.astrosurf.com/buil/iris/tutorial2/doc8_us.htm}.
+Note that you will have to change the values in the example codes.
+Finding the correct parameters is an iterative process and can be difficult, so take some time and be careful.
+
+First, try background estimation on a single image, and look at the estimated background image.
+Ideally, the background image contains only the background, and no astronomical objects are visible.
+Be careful with large galaxies, as the background estimator may confuse these extended source for the background.
+
+Adjust the parameters of the background estimator, using the documentation of the \texttt{astropy} and \texttt{photutils} functions, until you obtain a result that looks good.
+For this step, it is important that you understand what your code does.
+
+Finally, subtract the estimated background from the science image, and check the result again.
+The background should now be centered around zero counts, while the astronomical objects are still visible.
+
+Once you have found good parameters, you can usually use the same parameters for all images of the same object.
 
 \subsection{Astrometric Calibration}
 
@@ -1784,22 +1756,13 @@ An example code is
     fits.writeto('path_to_aligned_image.fits', aligned_image, reference_head, overwrite=True)
 \end{minted}
 
-IRIS contains a tool to perform astrometric calibration.
-You can follow the tutorial in \url{http://www.astrosurf.com/buil/iris/tutorial13/doc31_us.htm}.
-
 \subsection{Stacking}
 
 Stacking consists of combining several astronomical images.
 In order to do that, images have to be aligned one respect to each other.
 
-There are 3 options to perform this task:
+There are several options:
 \begin{itemize}
-    \item DeepSkyStacker: it has a graphical interface that makes things easy to perform, however it works only under Windows.
-          Tutorials on how to use it can be found in the website.
-    \item
-          IRIS: first you need to align the single exposures.
-          To do that, just follow the section `Align the images' in \url{http://www.astrosurf.com/buil/iris/tutorial3/doc13_us.htm} or follow the tutorials in \url{http://www.astrosurf.com/buil/iris/tutorial2/doc10_us.htm} or \url{http://www.astrosurf.com/buil/iris/tutorial2/doc11_us.htm}.
-          After the alignment, you can stack the single exposure by following the section `Stack a set of images' in \url{http://www.astrosurf.com/buil/iris/tutorial3/doc13_us.htm} or follow the tutorial in \url{http://www.astrosurf.com/buil/iris/tutorial2/doc121_us.htm}.
     \item
           \software{Python}-based: first you align all the images to a reference one with 'astroalign'.
           Then those images can be combined by adding them
