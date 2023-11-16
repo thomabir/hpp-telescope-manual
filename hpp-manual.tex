@@ -425,14 +425,13 @@ Current contact for the telescope: \url{thomabir@phys.ethz.ch}
         \midrule
         \multicolumn{2}{c}{Electronics}                                                                                \\
         \midrule
-        Saturation signal                 & \num{65535}
-        ADU                                                                                                            \\
+        Saturation signal                 & \SI{65535}{\adu}    \\
         Quantum efficiency                & \SI{60}{\percent} at \SI{550}{\nm}                                         \\
         Read noise                        & \SI{9}{\electron} \textsc{rms}                                             \\
         Dark current                      & \SI{3}{\electron\per\pixel\per\second} at \SI{25}{\celsius},               \\
                                           & \SI{0.02}{\electron\per\pixel\per\second} at \SI{-20}{\celsius}            \\
         Dark current doubling temperature & \SI{6.3}{\celsius}                                                         \\
-        A/D Gain                          & \SI{1.27}{\electron}/ADU                                                   \\
+        A/D Gain                          & \SI{1.27}{\electron\per\adu}                                     \\
         A/D bits                          & \SI{16}{\bit}                                                              \\
         \midrule \multicolumn{2}{c}{Other}                                                                             \\
         \midrule Exposure time            & \SIrange{0.1}{3600}{\second}                                               \\
@@ -835,7 +834,6 @@ Generally, six stars, including the three reference stars, are enough for accura
 Do not forget to save your model under \texttt{Menu -> Alignment -> Align Database -> Save Model}, such that it can still be used after restarting the mount.
 
 \chapter{Imaging}
-This section is still under construction.
 
 \section{Overview}
 The instruments can be operated remotely from the computer in the control room via \texttt{Remote Desktop}.
@@ -1749,10 +1747,12 @@ Once you have found good parameters, you can usually use the same parameters for
 
 \subsection{Astrometric Calibration}
 
+\paragraph{Astrometry.net}
 The astrometric calibration is performed through the website \url{astrometry.net}.
 You need to upload either a single image or a tarball (.tar, .gz), containing fits images to \url{http://nova.astrometry.net/upload}.
 It will recognize stars in the image and it will give you back the same input images, but with the astrometric solution included.
 
+\paragraph{\software{SCAMP}.}
 The same steps can be performed using SCAMP.
 See \url{https://scamp.readthedocs.io/en/latest/Using.html} for a tutorial on how to use it.
 SCAMP needs a list of catalogues and a configuration file in order to work.
@@ -1773,6 +1773,7 @@ Then run SCAMP with
     scamp catalogue_list -c scamp.conf
 \end{minted}
 
+\paragraph{\software{astroalign}.}
 Alternatively, you can use a \software{Python} package called 'astroalign' (\url{https://github.com/toros-astro/astroalign}).
 You can install it with
 \begin{minted}{bash}
@@ -1835,8 +1836,8 @@ The photometric zero-point $m_\text{ZP}$ of an image is defined as
     \label{eq:magnitude-zero-point}
     m = -2.5 \log_{10} \left( \frac{N}{t} \right) + m_\text{ZP},
 \end{equation}
-where $N$ is the number of counts (either photons or ADUs) of a source, $t$ is the exposure time, $m$ is the apparent magnitude of the source, and $m_\text{ZP}$ is the photometric zero-point of the image.
-Here, it does not matter whether one uses ADUs or photons for $N$, as long as the same units are used for both the unkown source and the standard star.
+where $N$ is the number of counts (either photons or \si{adu}) of a source, $t$ is the exposure time, $m$ is the apparent magnitude of the source, and $m_\text{ZP}$ is the photometric zero-point of the image.
+Here, it does not matter whether one uses \si{adu} or photons for $N$, as long as the same units are used for both the unkown source and the standard star.
 
 
 
