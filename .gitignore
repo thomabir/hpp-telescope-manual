@@ -1,4 +1,5 @@
 ## Custom
+.DS_Store
 output/
 hpp-manual.pdf
 indent.log
