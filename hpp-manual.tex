@@ -1586,66 +1586,57 @@ If you use \texttt{Windows}, you can try the same instructions in the \texttt{Wi
 
 Additional software that can be useful are \software{Source Extractor}, \software{SCAMP}, and \software{SWARP}.
 
-\subsection{Python}
+\paragraph*{Python}
 We assume you already have a \texttt{Python 3} installation. In addition, we require the following packages:
 \begin{minted}{bash}
     pip install astropy numpy scipy matplotlib
 \end{minted}
 
 
-\subsection{DS9}
+\paragraph*{DS9}
 
 \texttt{DS9} displays \texttt{FITS} images and can be installed from its website\footnote{\texttt{DS9}: \url{https://sites.google.com/cfa.harvard.edu/saoimageds9/home}}.
 If you use macOS, I recommend using the \enquote{Aqua} version.
 
-\subsection{Source Extractor}
-
+\paragraph*{Source Extractor}
 Source extractor can be used to automatically detect stars in images, and to measure their flux.
 More details can be found in the documentation\footnote{\texttt{Source Extractor}: \url{https://sextractor.readthedocs.io/en/latest/Using.html}}.
-
-\paragraph{macOS}
-\begin{minted}{bash}
-    brew install sextractor
-\end{minted}
-
-\paragraph{Linux}
-\begin{minted}{bash}
-    sudo apt install sextractor
-\end{minted}
+\begin{itemize}
+    \item macOS: \texttt{brew install sextractor}
+    \item Linux: \texttt{sudo apt install sextractor}
+\end{itemize}
 
 
+% \paragraph*{SCAMP}
+% SCAMP computes the astrometric solution of astronomical images.
+% Since I provide also a website where to do it, it is not stricly necessary that you install it.
 
-\subsection{SCAMP}
+% \textbf{MacOS} users can easily install SCAMP with 'Macports'.
+% Simply type
+% \begin{minted}{bash}
+%     sudo port install scamp
+% \end{minted}
+% in your terminal window.
 
-SCAMP computes the astrometric solution of astronomical images.
-Since I provide also a website where to do it, it is not stricly necessary that you install it.
-
-\textbf{MacOS} users can easily install SCAMP with 'Macports'.
-Simply type
-\begin{minted}{bash}
-    sudo port install scamp
-\end{minted}
-in your terminal window.
-
-\textbf{Linux} users have to follow the instructions on the website \url{https://scamp.readthedocs.io/en/latest/Installing.html}.
+% \textbf{Linux} users have to follow the instructions on the website \url{https://scamp.readthedocs.io/en/latest/Installing.html}.
 
 
-\subsection{SWARP}
+% \paragraph*{SWARP}
 
-\textbf{MacOS} users can easily install SWARP with 'Macports'.
-Simply type
-\begin{minted}{bash}
-    sudo port install swarp
-\end{minted}
-in your terminal window.
+% \textbf{MacOS} users can easily install SWARP with 'Macports'.
+% Simply type
+% \begin{minted}{bash}
+%     sudo port install swarp
+% \end{minted}
+% in your terminal window.
 
-\textbf{Linux} users have to follow the instructions on the website \url{https://www.astromatic.net/software/swarp}.
+% \textbf{Linux} users have to follow the instructions on the website \url{https://www.astromatic.net/software/swarp}.
 
 
 \section{Data Reduction Steps}
 \label{section:data_red_steps}
 
-In this section, we go through the data reduction steps, with some example code on how to perform the different tasks.
+In this section, we go through the data reduction steps with some example code.
 Unless otherwise noted, all code snippets are in \software{Python}.
 
 \begin{important}
@@ -1745,44 +1736,29 @@ The background should now be centered around zero counts, while the astronomical
 
 Once you have found good parameters, you can usually use the same parameters for all images of the same object.
 
+% TODO: source estimation (like source extractor, but a Python module/API would be nice)
+
 \subsection{Astrometric Calibration}
 
-\paragraph{Astrometry.net}
-The astrometric calibration is performed through the website \url{astrometry.net}.
-You need to upload either a single image or a tarball (.tar, .gz), containing fits images to \url{http://nova.astrometry.net/upload}.
-It will recognize stars in the image and it will give you back the same input images, but with the astrometric solution included.
+Astrometric calibration refers to the process of finding a mapping from the $(x,y)$ position of each pixel in an image to astronomical coordinates such as $(\text{ra}, \text{dec})$.
+It involves comparing the stars in the image to a database of stars with known positions, and then finding a transformation between them.
+This process is also called \emph{plave solving}.
+The transformation may be a simple affine transformation with a matrix to correct for rotation and offset of the image, called a \emph{World Coordinate System} (\textsc{wcs}), but it can also include polynomials that describe the non-linear optical distortion of the image, called \emph{Simple Imaging Polynomials} (\textsc{sip}).
 
-\paragraph{\software{SCAMP}.}
-The same steps can be performed using SCAMP.
-See \url{https://scamp.readthedocs.io/en/latest/Using.html} for a tutorial on how to use it.
-SCAMP needs a list of catalogues and a configuration file in order to work.
-First, you need to run Source Extractor on each image.
-Look for the 'default.param' file and uncomment the lines containing the following parameters: 'XWIN\_IMAGE', 'YWIN\_IMAGE', 'ERRAWIN\_IMAGE', 'ERRBWIN\_IMAGE', 'ERRTHETAWIN\_IMAGE', 'FLUX\_AUTO', 'FLUXERR\_AUTO', 'FLAGS', 'FLAGS\_WEIGHT', 'IMAFLAGS\_ISO', 'FLUX\_RADIUS', 'ELONGATION'.
-The, look for the 'defaul.sex' file, open it and change 'CATALOG\_TYPE' in 'FITS\_LDAC' and 'PARAMETERS\_NAME' in the path to 'default.param'.
-The rest of the parameters is up to you to discover what they do and which value to choose.
-Now you can run Source Extractor:
-\begin{minted}{bash}
-    sex image_path -c default.sex -CATALOG_NAME 'path_to_catalogue_name'
-\end{minted}
-These catalogues that you have created for each image will be read by SCAMP.
-First, create an ASCII file where each line contains the path to the Source Extractor output catalogues, preceded by \@.
-Then look for the configuration file (usually it ends with '*.conf') and check that the 'SOLVE\_ASTROM' parameters is set to 'Y'.
-Check the manual for the other parameters meaning and values.
-Then run SCAMP with
-\begin{minted}{bash}
-    scamp catalogue_list -c scamp.conf
-\end{minted}
+The astrometric solution is usually stored in the fits header for later use.
 
-\paragraph{\software{astroalign}.}
-Alternatively, you can use a \software{Python} package called 'astroalign' (\url{https://github.com/toros-astro/astroalign}).
-You can install it with
-\begin{minted}{bash}
-    pip install astroalign
-\end{minted}
-This package finds similar 3 point asterisms in an input and reference image and computes the affine transformation between them.
+\paragraph{\software{astrometry.net} (online solver)}
+A very reliable and robust plate solver is the website \url{astrometry.net}, but it can be quite slow since you have to upload your images and then wait for the server to finish processing.
+You can upload either a single image or a tarball (\texttt{.tar}, \software{.gz}), containing fits images to \url{http://nova.astrometry.net/upload}.
+It will return the input images, but with the astrometric calibration information added to the fits header.
+
+Other solver exist and may be added to the manual at some point.
+
+\subsection{Alignment}
+
+The \texttt{astroalign} module finds similar 3 point asterisms in an input and reference image and computes the affine transformation between them.
 It may not work on images of extended objects with few point-like sources or in very crowded fields.
-However, also in these cases, one of the three methods will do the job.
-An example code is
+Conveniently, no astrometric solution is required for \software{astroalign} to work.
 \begin{minted}{python}
     from astropy.io import fits
     import astroalign
@@ -1793,41 +1769,21 @@ An example code is
     fits.writeto('path_to_aligned_image.fits', aligned_image, reference_head, overwrite=True)
 \end{minted}
 
+% TODO provide alignment method when astrometric solution exists
+
+
 \subsection{Stacking}
 
-Stacking consists of combining several astronomical images.
-In order to do that, images have to be aligned one respect to each other.
+Stacking consists of combining several astronomical images, with the goal of reducing random noise and events, and improving signal-to-noise ratio.
+Before stacking, images have to be aligned with respect to each other.
 
-There are several options:
-\begin{itemize}
-    \item
-          \software{Python}-based: first you align all the images to a reference one with 'astroalign'.
-          Then those images can be combined by adding them
-          \begin{minted}{python}
-            final_science = aligned_image_1 + aligned_image_2
-          \end{minted}
-          if you want to obtain a deeper image (e.g., for galaxies), or they can be combined by averaging them
-          \begin{minted}{python}
-            list = [aligned_image_1, aligned_image_2]
-            final_science = np.mean(list, axis=0)
-          \end{minted}
-          for example when you have star images, e.g., a standard star.
-          This method does not work for images downloaded from 'astrometry.net', since it only computes the astrometric solution, but it doesn't change the pixel position of objects.
-    \item
-          SWARP: this is the most precise method, but it requires images having the
-          astrometric solution in their headers.
-          Therefore, it requires as input images downloaded from 'astrometry.net' or that have been processed with SCAMP.
-          SWARP manual can be found at \url{https://www.astromatic.net/pubsvn/software/swarp/trunk/doc/swarp.pdf}.
-          Look for the configuration file (it should end with '*.swarp') and check that the 'COMBINE' parameter is set to 'Y'.
-          Check the manual for the other parameters meaning and values.
-          If you have images from 'astrometry.net', you can create an ASCII file with image paths (as in SCAMP) and then you run SWARP with
-          \begin{minted}{bash}
-            swarp image_list -c hpp.swarp
-          \end{minted}
-          to obtain as output a coadded (combined) image.
-          Exposure times, gains etc. will be updated accordingly.
-          If you have catalogues from SCAMP, then it will output a .head file that can be read by SWARP by setting the 'HEADER\_ONLY' parameter to 'Y' (see manual for more details).
-\end{itemize}
+To stack a list of images, we recommend either using the median or a sigma-clipped average, see \software{astropy}'s \software{sigma\_clipped\_stats} function.
+\begin{minted}{python}
+    imgs = [aligned_image_1, aligned_image_2]
+    final_science = np.median(imgs, axis=0)
+\end{minted}
+If a mean is used instead, artifacts like cosmis rays and satellite trails will still be visible in the stacked image, while a median or a sigma-clipped mean will reject outliers.
+
 
 \subsection{Photometric Calibration}
 
@@ -1838,8 +1794,6 @@ The photometric zero-point $m_\text{ZP}$ of an image is defined as
 \end{equation}
 where $N$ is the number of counts (either photons or \si{adu}) of a source, $t$ is the exposure time, $m$ is the apparent magnitude of the source, and $m_\text{ZP}$ is the photometric zero-point of the image.
 Here, it does not matter whether one uses \si{adu} or photons for $N$, as long as the same units are used for both the unkown source and the standard star.
-
-
 
 Photometric calibration involves two steps:
 
@@ -1853,188 +1807,20 @@ If this is not possible, then the standard star can be observed in a different i
 
 
 
-\subsection{Seeing Estimate}
+\subsection{\textsc{Psf} \& seeing estimation}
 
-For different experiment it may be needed to estimate the point spread function (PSF) of the image.
-The PSF is the response of the detector to a point-like source.
-In the absence of the atmosphere, this is close to the Airy patterns produced by diffraction.
-Since we perform observations on the ground, the image of a point-source breaks into speckle patters that rapidly vary with time.
-It is the turbolence and the temperature gradients of the atmosphere to give rise to this effect.
-How much the atmosphere perturbs the image of stars seen through a telescope is often referred to as seeing.
-Its most common measurement is through the full width at half maximum (FWHM) of stars in the image.
+Different experiments may require an estimate of the image's point spread function (\textsc{psf}), which is the telescope's response to a point source, such as a star.
+In the absence of atmospheric turbulence, this closely resembles an Airy pattern. 
+However, ground-based observations result in point-source images breaking into rapidly varying speckle patterns due to atmospheric turbulence and temperature gradients.
+This atmospheric disturbance on the image of stars viewed through a telescope is called the \emph{seeing}.
+It is typically measured through the full width at half maximum (\textsc{fwhm}) of stars in the image.
 
-There are different ways to measure the seeing of images.
-The simplest ones consists in fitting the 2D distribution of star light with either a Gaussian or a Moffat profile.
-One needs to identify stars in the image, then cut stamps around the stars (one can use the `\software{astropy} Cutout2D' \software{Python} module).
-These stamps need to be large enough to contain the full flux from the star, but no other nearby sources.
-Then one writes down the functional form of the 2D Gaussian or 2D circular Moffat profile and fit those to the star light distribution using the `\software{scipy} curve\_fit' \software{Python} module.
-The best-fitting FWHM can be used as estimate of the seeing.
-The result will be in units of pixel.
-It can be turned into arcsec units by multiplying it for the pixel scale of the image.
+There are various methods to measure image seeing.
+The simplest involves fitting the 2D distribution of the image of a star with either a Gaussian or a Moffat profile.
+This process requires identifying stars in the image, cutting out stamps around the stars using the 'astropy Cutout2D' Python module, and ensuring these stamps are large enough to contain the star's full flux but not any nearby sources.
+Then a 2D Gaussian or 2D circular Moffat profile is fitted to the starlight distribution using \software{scipy}'s \software{curve\_fit} module.
+The best-fitting \textsc{fwhm} can be used as an estimate of the seeing, and the fitted 2D profile can be used for further processing steps, such as in \software{GALFIT}.
 
-\subsection{Credits}
-
-Credits to Uwe Schmitt for the virtual environment installation description and to Jason Fitzpatrick for how to install \software{Python} on Windows.
-
-\software{Python}
-Software Foundation.
-\software{Python}
-Language Reference, version 2.7.
-
-Anaconda Software Distribution.
-Computer software.
-Vers.
-2-2.4.0.
-Anaconda, Nov.
-2016.
-Web.
-<https://anaconda.com>.
-
-Homebrew was created by Max Howell.
-Website by Remi Prevost, Mike McQuaid and Danielle Lalonde.
-
-SAOImage DS9 development has been made possible by funding from the Chandra X-ray Science Center (CXC) and the High Energy Astrophysics Science Archive Center (HEASARC).
-Additional funding was provided by the JWST Mission office at Space Telescope Science Institute to improve capabilities for 3-D data visualization.
-
-E.
-Bertin and S.
-Arnouts.
-SExtractor: Software for source extraction.
-A\&AS, 117:393-404, 1996.
-
-E.
-Bertin, Y.
-Mellier, M.
-Radovich, G.
-Missonnier, P.
-Didelon, and B.
-Morin.
-The TERAPIX Pipeline.
-In D.
-A.
-Bohlender, D.
-Durand, and T.
-H.
-Handley, editors, Astronomical Data Analysis Software and Systems XI, volume 281 of Astronomical Society of the Pacific Conference Series, 228.
-2002.
-
-Credits to \url{http://deepskystacker.free.fr/english/index.html}.
-
-van Dokkum 2001, PASP, 113, 789, 1420
-\url{http://adsabs.harvard.edu/abs/2001PASP..113.1420V}.
-
-Credits to \url{https://github.com/toros-astro/astroalign}.
-
-This research made use of \software{astropy},\footnote{http://www.astropy.org} a community-developed core \software{Python} package for Astronomy (Robitaille et al.
-A\&A 558, A33 (2013)).
-
-Phoutils: DOI 10.5281/zenodo.1340699
-
-Credits and many thanks to Stuart Littlefair \url{http://slittlefair.staff.shef.ac.uk}.
-
-% \chapter{Photometric calibration}
-
-% Often, we want to measure the brightness of an object in some standardised system, for example the luminosity in Watts, so that we can compare it to other known objects, and previous measurements by other observers.
-
-% For this chapter, we assume that we measure only in a single wavelength band, i.e. with a single filter. If multiple filters are used, the procedure has to be repeated for each filter.
-
-
-% \section*{Theory: Units of brightness}
-
-% \paragraph*{Analog-to-digital-units}
-% What we measure is the number of counts $N_\text{\textsc{adu}}$ that are registered on the sensor in each pixel during an exposure.
-% They depend on the observing conditions, the telescope used, the quantum efficiency of the sensor, the spectrum of the light, and many other factors.
-% Before we can extract useful quantities, we have to perform calibrations.
-
-% \paragraph*{Photons}
-% Using the specification for the gain of the camera, which is $g = \SI{1.27}{\electron}/\text{\textsc{adu}}$ as shown in \cref{tab:specs-camera}, we can determine how many electrons $N_e$ this corresponds to using
-% \begin{align*}
-%     N_e = g N_\text{\textsc{adu}}.
-% \end{align*}
-% The number of photons that have been registered on the detector is equal to the number of electrons, so we usually use $N_e$ as a proxy for photons as well.
-
-% \paragraph*{Instrumental magnitude}
-% The instrumental magnitude $m_\text{inst}$ of an object is a unitless quantity defined as
-% \begin{align*}
-%     m_\text{inst} = − 2.5 \log(N_e/t),
-% \end{align*}
-% where $t$ is the exposure time of the image.
-% As the name suggests, the instrumental magnitude still depends on the specific instrument used to observe a target.
-
-% \paragraph*{Apparent magnitude}
-% The apparent magnitude $m$ of an object is a unitless quantity defined as
-% \begin{align*}
-%     m = - 2.5 \log(F/F_0),
-% \end{align*}
-% where $F$ is the flux of an object that reaches Earth, and $F_0$ is the flux of Vega, observed through the same filter.
-% We can see that magnitudes are a measurement system for ratios: A star that appears 100 times dimmer than Vega has a magnitude of $- 2.5 \log(1/100) = 5$.
-% To get from the instrumental magnitude to the apparent magnitude, we have to perform photometric calibration with photometric standard stars, TODO see later.
-
-% \paragraph*{Absolute magnitude}
-% The absolute magnitude $m$ of an object is a unitless quantity defined as
-% \begin{align*}
-%     M = m - 5 \log(d/\text{pc}) + 5,
-% \end{align*}
-% where $d$ is the distance from the observer to the object, and a \si{\parsec}, short for parsec, is a unit of distance.
-
-% In other words, the absolute magnitude of an object is the apparent magnitude it would have if we brought it to a distance of \SI{10}{\parsec}, where the term $- 5 \log(d/\text{pc}) + 5$ evaluates to zero.
-
-% \paragraph*{Flux}
-
-% \paragraph*{Luminosity}
-
-
-
-
-% \begin{table}
-%     \centering
-%     \begin{tabular}{llll}
-%         \toprule
-%         Quantity & Symbol & Unit & Defining equation\\
-%         \midrule
-%         \textsc{Adu} rate & $N_\text{\textsc{adu}}/t$ & \si{\per\second} & \\
-%         Electron rate & $N_e/t$ & \si{\per\second} & \\
-%         Instrumental magnitude & $m_\text{inst}$ & unitless & $m_\text{inst} = − 2.5 \log(N_e/t)$\\
-%         (Apparent) magnitude & $m$ & unitless &  $m = - 2.5 \log(F/F_0)$\\
-%         Absolute magnitude & $M$ & unitless & $M = m - 5 \log(d/\text{pc}) + 5$ \\
-%         Flux & $F$ & \si{\watt\per\meter\squared} & \\
-%         Luminosity & $L$ & \si{\watt} & $L = 4 \pi d^2 F$ \\
-%         \bottomrule 
-%     \end{tabular}
-%     \caption{Common methods to state brightness, and their defining equations. Quantities: $d$ is the distance between the object and the observer.}
-%     \label{tab:brightness-quantities}
-% \end{table}
-
-% \section{Step-by-step calibration}
-
-% We have corrected our science frames with dark frames and flat frames, we have subtracted the background from each corrected frame, and we have aligned and stacked them into one final image of our target.
-
-% To perform photometric calibration, we need observations of two targets: The actual target we want to measure the brightness of, and a reference target, usually a standard star.
-
-% The rough plan is the following: Count how many electrons are registered on the sensor per second from the standard star, and look up the apparent magnitude of the standard star from a table -- this gives us a conversion between electrons per second and apparent magnitude.
-% We then count how many electrons arrive per second from our unknown target, and use the conversion factor to derive the apparent magnitude of the target.
-% After that, getting absolute magnitude, flux, and luminosity is just plugging in into some equations.
-
-% \paragraph*{Magnitude zero point}
-% Look up the magnitude of the standard star $m$ in the filter you are observing in from a table.
-% Calculate the instrumental magnitude of the reference star using
-% \begin{align*}
-%     m_\text{inst} = − 2.5 \log(N_e/t).
-% \end{align*}
-% Then, the magnitude-zero point of $m_\text{zp}$ of the image results from
-% \begin{align*}
-%     m = m_\text{inst} + m_\text{zp}.
-% \end{align*}
-% The idea: The magnitude zero point is approximately the same if the reference star and the target are observed at a similar time, at a similar region of the sky, with the same instrument.
-% So we can reuse $m_\text{zp}$ for the image of the target as well!
-
-% \paragraph*{Apparent magnitude of the target}
-% Assume we have counted the electron rate $N_e/t$ of the target.
-% Then we get the apparent magnitude of the target using again
-% \begin{align*}
-%     m = m_\text{inst} + m_\text{zp},
-% \end{align*}
-% where this time $m$ is the unknown, and the other two are known.
 
 % \paragraph*{Flux}
 
