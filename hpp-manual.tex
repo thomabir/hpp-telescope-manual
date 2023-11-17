@@ -54,49 +54,49 @@
 
 % UNCOMMENT ENDS HERE
 
-\usepackage{marginnote}
-\NewDocumentCommand\trule{O{0.4pt}O{0pt}}{
-\vskip0pt\vtop to0pt{
-        \noindent\raisebox{#2}{\vbox{\leavevmode\hrule height#1}}}
-}
+% \usepackage{marginnote}
+% \NewDocumentCommand\trule{O{0.4pt}O{0pt}}{
+% \vskip0pt\vtop to0pt{
+%         \noindent\raisebox{#2}{\vbox{\leavevmode\hrule height#1}}}
+% }
 
 \setsecnumdepth{subsection}
 \settocdepth{section}
 
-\makechapterstyle{Bringhurst}{%
-    % \makechapterstyle{default}{%
-    \chapterstyle{default}
-    \setsecnumdepth{subsection}
-    \renewcommand{\chaptitlefont}
-    {\normalfont\bfseries%
-        \addfontfeature{UprightFeatures={LetterSpace=6.0}}
-    }
-    \renewcommand{\chapnumfont}{%
-        \fontspec[Numbers=OldStyle]{Libertinus Serif Display}
-        \fontsize{72pt}{72pt}\selectfont
-        \color{black}}
-    \renewcommand*{\chapterheadstart}{}
-    \renewcommand*{\printchaptername}{}
-    \renewcommand*{\chapternamenum}{}
-    % \renewcommand*{\printchapternum}{%
-    %   \marginnote{\chapnumfont \thechapter}
-    % }%
-    \renewcommand*{\afterchapternum}{}
-    \renewcommand*{\printchaptertitle}[1]{
-        \chaptitlefont\raggedright\Huge\MakeUppercase{##1}}
-    % \renewcommand*{\afterchaptertitle}{\trule\vspace{\baselineskip}}
-    % \renewcommand*{\afterchaptertitle}{\baselineskip}
+% \makechapterstyle{Bringhurst}{%
+%     % \makechapterstyle{default}{%
+%     \chapterstyle{default}
+%     \setsecnumdepth{subsection}
+%     \renewcommand{\chaptitlefont}
+%     {\normalfont\bfseries%
+%         \addfontfeature{UprightFeatures={LetterSpace=6.0}}
+%     }
+%     \renewcommand{\chapnumfont}{%
+%         \fontspec[Numbers=OldStyle]{Libertinus Serif Display}
+%         \fontsize{72pt}{72pt}\selectfont
+%         \color{black}}
+%     \renewcommand*{\chapterheadstart}{}
+%     \renewcommand*{\printchaptername}{}
+%     \renewcommand*{\chapternamenum}{}
+%     % \renewcommand*{\printchapternum}{%
+%     %   \marginnote{\chapnumfont \thechapter}
+%     % }%
+%     \renewcommand*{\afterchapternum}{}
+%     \renewcommand*{\printchaptertitle}[1]{
+%         \chaptitlefont\raggedright\Huge\MakeUppercase{##1}}
+%     % \renewcommand*{\afterchaptertitle}{\trule\vspace{\baselineskip}}
+%     % \renewcommand*{\afterchaptertitle}{\baselineskip}
 
-    \setsecindent{0pt}
-    \setsecheadstyle{\normalfont\LARGE\bfseries\raggedright}
+%     \setsecindent{0pt}
+%     \setsecheadstyle{\normalfont\LARGE\bfseries\raggedright}
 
-    \setsubsecindent{0pt}
-    \setsubsecheadstyle{\normalfont\Large\bfseries\raggedright}
+%     \setsubsecindent{0pt}
+%     \setsubsecheadstyle{\normalfont\Large\bfseries\raggedright}
 
-    \setsubsubsecheadstyle{\normalfont\large\bfseries\scshape\raggedright\MakeLowercase}
+%     \setsubsubsecheadstyle{\normalfont\large\bfseries\scshape\raggedright\MakeLowercase}
 
-    \setparaheadstyle{\normalfont\raggedright\bfseries}
-}
+%     \setparaheadstyle{\normalfont\raggedright\bfseries}
+% }
 
 \usepackage[
     per-mode = symbol,
@@ -289,7 +289,7 @@
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 
 \begin{document}
-\chapterstyle{Bringhurst}
+% \chapterstyle{Bringhurst}
 
 \date{\today}
 \author{Thomas Birbacher \and Luca Tortorelli}
