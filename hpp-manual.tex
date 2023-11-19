@@ -54,49 +54,8 @@
 
 % UNCOMMENT ENDS HERE
 
-% \usepackage{marginnote}
-% \NewDocumentCommand\trule{O{0.4pt}O{0pt}}{
-% \vskip0pt\vtop to0pt{
-%         \noindent\raisebox{#2}{\vbox{\leavevmode\hrule height#1}}}
-% }
-
 \setsecnumdepth{subsection}
 \settocdepth{section}
-
-% \makechapterstyle{Bringhurst}{%
-%     % \makechapterstyle{default}{%
-%     \chapterstyle{default}
-%     \setsecnumdepth{subsection}
-%     \renewcommand{\chaptitlefont}
-%     {\normalfont\bfseries%
-%         \addfontfeature{UprightFeatures={LetterSpace=6.0}}
-%     }
-%     \renewcommand{\chapnumfont}{%
-%         \fontspec[Numbers=OldStyle]{Libertinus Serif Display}
-%         \fontsize{72pt}{72pt}\selectfont
-%         \color{black}}
-%     \renewcommand*{\chapterheadstart}{}
-%     \renewcommand*{\printchaptername}{}
-%     \renewcommand*{\chapternamenum}{}
-%     % \renewcommand*{\printchapternum}{%
-%     %   \marginnote{\chapnumfont \thechapter}
-%     % }%
-%     \renewcommand*{\afterchapternum}{}
-%     \renewcommand*{\printchaptertitle}[1]{
-%         \chaptitlefont\raggedright\Huge\MakeUppercase{##1}}
-%     % \renewcommand*{\afterchaptertitle}{\trule\vspace{\baselineskip}}
-%     % \renewcommand*{\afterchaptertitle}{\baselineskip}
-
-%     \setsecindent{0pt}
-%     \setsecheadstyle{\normalfont\LARGE\bfseries\raggedright}
-
-%     \setsubsecindent{0pt}
-%     \setsubsecheadstyle{\normalfont\Large\bfseries\raggedright}
-
-%     \setsubsubsecheadstyle{\normalfont\large\bfseries\scshape\raggedright\MakeLowercase}
-
-%     \setparaheadstyle{\normalfont\raggedright\bfseries}
-% }
 
 \usepackage[
     per-mode = symbol,
@@ -111,6 +70,8 @@
 \DeclareSIUnit{\parsec}{\text{pc}}
 \DeclareSIUnit{\angstrom}{\text{Å}}
 \DeclareSIUnit{\erg}{\text{erg}}
+\DeclareSIUnit{\year}{\text{yr}}
+\DeclareSIUnit{\Msun}{\ensuremath{\text{M}_\odot}}
 
 \usepackage{xparse}
 
@@ -218,6 +179,61 @@
 \usepackage{floatflt}
 \usepackage{wrapfig}
 
+% journal abbreviations
+\newcommand{\actaa}{Acta Astron.} % Acta Astronomica
+\newcommand{\araa}{Annu. Rev. Astron. Astrophys.} % Annual Review of Astron and Astrophys
+\newcommand{\aar}{Astron. Astrophys. Rev.} % Astrononmy and Astrophysics Review
+\newcommand{\ab}{Astrobiol.} % Astrobiology
+\newcommand{\aj}{Astron. J.} % Astronomical Journal
+\newcommand{\apj}{Astrophys. J.} % Astrophysical Journal
+\newcommand{\apjl}{Astrophys. J. Lett.} % Astrophysical Journal, Letters
+\newcommand{\apjs}{Astrophys. J. Suppl. Ser.} % Astrophysical Journal, Supplement
+\newcommand{\ao}{Appl. Opt.} % Applied Optics
+\newcommand{\apss}{Astrophys. Space Sci.} % Astrophysics and Space Science
+\newcommand{\aap}{Astron. Astrophys.} % Astronomy and Astrophysics
+\newcommand{\aapr}{Astron. Astrophys. Rev.} % Astronomy and Astrophysics Reviews
+\newcommand{\aaps}{Astron. Astrophys. Suppl.} % Astronomy and Astrophysics, Supplement
+\newcommand{\baas}{Bull. Am. Astron. Soc.} % Bulletin of the AAS
+\newcommand{\caa}{Chinese Astron. Astrophys.} % Chinese Astronomy and Astrophysics
+\newcommand{\cjaa}{Chinese J. Astron. Astrophys.} % Chinese Journal of Astronomy and Astrophysics
+\newcommand{\cqg}{Class. Quantum Gravity} % Classical and Quantum Gravity
+\newcommand{\gal}{Galaxies} % Galaxies
+\newcommand{\gca}{Geochim. Cosmochim. Acta} % Geochimica Cosmochimica Acta
+\newcommand{\icarus}{Icarus} % Icarus
+\newcommand{\jcap}{J. Cosmol. Astropart. Phys.} % Journal of Cosmology and Astroparticle Physics
+\newcommand{\jgr}{J. Geophys. Res.} % Journal of Geophysics Research
+\newcommand{\jgrp}{J. Geophys. Res.: Planets} % Journal of Geophysics Research: Planets
+\newcommand{\jqsrt}{J. Quant. Spectrosc. Radiat. Transf.} % Journal of Quantitiative Spectroscopy and Radiative Transfer
+\newcommand{\memsai}{Mem. Soc. Astron. Italiana} % Mem. Societa Astronomica Italiana
+\newcommand{\mnras}{Mon. Not. R. Astron. Soc.} % Monthly Notices of the RAS
+\newcommand{\nat}{Nature} % Nature
+\newcommand{\nastro}{Nat. Astron.} % Nature Astronomy
+\newcommand{\ncomms}{Nat. Commun.} % Nature Communications
+\newcommand{\nphys}{Nat. Phys.} % Nature Physics
+\newcommand{\na}{New Astron.} % New Astronomy
+\newcommand{\nar}{New Astron. Rev.} % New Astronomy Review
+\newcommand{\physrep}{Phys. Rep.} % Physics Reports
+\newcommand{\pra}{Phys. Rev. A} % Physical Review A: General Physics
+\newcommand{\prb}{Phys. Rev. B} % Physical Review B: Solid State
+\newcommand{\prc}{Phys. Rev. C} % Physical Review C
+\newcommand{\prd}{Phys. Rev. D} % Physical Review D
+\newcommand{\pre}{Phys. Rev. E} % Physical Review E
+\newcommand{\prl}{Phys. Rev. Lett.} % Physical Review Letters
+\newcommand{\psj}{Planet. Sci. J.} % Planetary Science Journal
+\newcommand{\planss}{Planet. Space Sci.} % Planetary Space Science
+\newcommand{\pnas}{Proc. Natl Acad. Sci. USA} % Proceedings of the US National Academy of Sciences
+\newcommand{\procspie}{Proc. SPIE} % Proceedings of the SPIE
+\newcommand{\pasa}{Publ. Astron. Soc. Aust.} % Publications of the Astron. Soc. of Australia
+\newcommand{\pasj}{Publ. Astron. Soc. Jpn} % Publications of the Astron. Soc. of Japan (note no full stop following Jpn)
+\newcommand{\pasp}{Publ. Astron. Soc. Pac.} % Publications of the Astron. Soc. of the Pacific
+\newcommand{\rmxaa}{Rev. Mexicana Astron. Astrofis.} % Revista Mexicana de Astronomia y Astrofisica
+\newcommand{\sci}{Science} % Science
+\newcommand{\sciadv}{Sci. Adv.} % Science Advances
+\newcommand{\solphys}{Sol. Phys.} % Solar Physics
+\newcommand{\sovast}{Soviet Ast.} % Soviet Astronomy
+\newcommand{\ssr}{Space Sci. Rev.} % Space Science Reviews
+\newcommand{\uni}{Universe} % Universe
+
 % BIBLIOGRAPHY
 %
 \usepackage[%
@@ -289,13 +305,12 @@
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 
 \begin{document}
-% \chapterstyle{Bringhurst}
+
 
 \date{\today}
 \author{Thomas Birbacher \and Luca Tortorelli}
 \title{HPP Observatory \\ User Guide, Data Reduction and Experiments}
 
-% \maketitle
 
 \begin{titlingpage}
     \begin{center}
@@ -1669,6 +1684,7 @@ To store a numpy array as a fits file, you can use:
 \end{minted}
 
 \subsection{Dark Subtraction and Flat Fielding Correction}
+\label{ssec:dark-flat-correction}
 
 The bias, dark subtraction and the flat fielding correction are applied to the 'raw science frame' according to the following:
 \begin{equation}
@@ -1690,6 +1706,7 @@ The variable 'median image' will contain the median of the electronic counts of 
 Once you create the different median images, you can perform the dark subtraction and the flat fielding corrections as in \ref{correction}.
 
 \subsection{Cosmic Ray Rejection}
+\label{ssec:cosmic-ray-rejection}
 Cosmic rays usually appear as single saturated pixels in the image, wheras stars are extended objects.
 Cosmic ray rejection, i.e. the process of automatically detecting and removing cosmic rays, can be performed with Astroscrappy\footnote{\url{https://github.com/astropy/astroscrappy}} or \software{cosmics.py}\footnote{\url{https://obswww.unige.ch/~tewes/cosmics_dot_py/}}.
 Cosmic ray rejection has to be performed for each science image.
@@ -1716,6 +1733,7 @@ The code above is only an example and may have to be modified to your needs.
 The code above is only an example and may have to be modified to your needs.
 
 \subsection{Background Subtraction}
+\label{ssec:background-subtraction}
 
 The background can be caused by light pollution, natural skyglow, moonlight, clouds etc.
 Background subtraction has to be performed for each science image, for example following the \texttt{photutils} tutorial\footnote{\url{https://photutils.readthedocs.io/en/stable/background.html}}.
@@ -1738,9 +1756,8 @@ The background should now be centered around zero counts, while the astronomical
 
 Once you have found good parameters, you can usually use the same parameters for all images of the same object.
 
-% TODO: source estimation (like source extractor, but a Python module/API would be nice)
-
 \subsection{Astrometric Calibration}
+\label{ssec:astrometric-calibration}
 
 Astrometric calibration refers to the process of finding a mapping from the $(x,y)$ position of each pixel in an image to astronomical coordinates such as $(\text{ra}, \text{dec})$.
 It involves comparing the stars in the image to a database of stars with known positions, and then finding a transformation between them.
@@ -1757,6 +1774,7 @@ It will return the input images, but with the astrometric calibration informatio
 Other solver exist and may be added to the manual at some point.
 
 \subsection{Alignment}
+\label{ssec:alignment}
 
 The \texttt{astroalign} module finds similar 3 point asterisms in an input and reference image and computes the affine transformation between them.
 It may not work on images of extended objects with few point-like sources or in very crowded fields.
@@ -1775,6 +1793,7 @@ Conveniently, no astrometric solution is required for \software{astroalign} to w
 
 
 \subsection{Stacking}
+\label{ssec:stacking}
 
 Stacking consists of combining several astronomical images, with the goal of reducing random noise and events, and improving signal-to-noise ratio.
 Before stacking, images have to be aligned with respect to each other.
@@ -1786,21 +1805,48 @@ To stack a list of images, we recommend either using the median or a sigma-clipp
 \end{minted}
 If a mean is used instead, artifacts like cosmis rays and satellite trails will still be visible in the stacked image, while a median or a sigma-clipped mean will reject outliers.
 
+\subsection{Source extraction}
+\label{ssec:source-extraction}
+
+Source extraction is the process of detecting sources, such as stars or galaxies, in an image
+
+Sources can be detected manually, by finding their approxmiate pixel coordinates and potentially refining the positions by fitting a Gaussian to them, or automatically with a software like \software{source extractor}.
+
+If there are only few sources present, the manual method is feasible, but when dealing with a large number of sources, or a source that moves from image to image, the automatic method is preferred.
+
+% TODO: a Python module/API would be nice for automatic source extraction would be nice.
+
+\subsection{Photometry}
+\label{ssec:photometry}
+
+Photometry refers to the process of measuring the flux from sources in an image.
+Sometimes, photometry is included in the source extraction, such as with \software{source extractor}.
+
+A popular method is \emph{aperture photometry}, where a \enquote{disk} with a specified radius is placed at the center of the source, and all counts within that disk are summed up.
+To correct for the background, the counts in an annulus (ring) a bit further around the source can be summed up and subtracted from the source flux.
+
+To measure the number of counts in a region using aperture photometry, you can use \texttt{astropy}'s \texttt{photutils}\footnote{\url{https://photutils.readthedocs.io/en/stable/aperture.html}} package.
+
+An alternative method is to fit the 2D intensity profile of the sources.
+For a star, that means fitting the point spread function (\textsc{psf}) to the image, as described in \cref{ssec:psf-seeing-estimation}, and then calculating the total brightness of the \textsc{psf}.
+Extended sources such as galaxies require a different approach, as they are not point sources, and software such as \software{GALFIT} can be used.
+
 
 \subsection{Photometric Calibration}
+\label{ssec:photometric-calibration}
 
 The photometric zero-point $m_\text{ZP}$ of an image is defined as
 \begin{equation}
     \label{eq:magnitude-zero-point}
     m = -2.5 \log_{10} \left( \frac{N}{t} \right) + m_\text{ZP},
 \end{equation}
-where $N$ is the number of counts (either photons or \si{adu}) of a source, $t$ is the exposure time, $m$ is the apparent magnitude of the source, and $m_\text{ZP}$ is the photometric zero-point of the image.
-Here, it does not matter whether one uses \si{adu} or photons for $N$, as long as the same units are used for both the unkown source and the standard star.
+where $N$ is the number of counts (either photons or \si{\adu}) of a source, $t$ is the exposure time, $m$ is the apparent magnitude of the source, and $m_\text{ZP}$ is the photometric zero-point of the image.
+Here, it does not matter whether one uses \si{\adu} or photons for $N$, as long as the same units are used for both the unkown source and the standard star.
 
 Photometric calibration involves two steps:
 
-First, a standard star with known magnitude $m$ is observed, and the number of counts $N$ is measured. Then, $m_\text{ZP}$ can be computed from \cref{eq:magnitude-zero-point}.
-To measure the number of counts in a region, you can use \texttt{astropy}'s \texttt{photutils}\footnote{\url{https://photutils.readthedocs.io/en/stable/aperture.html}} package.
+First, a standard star with known magnitude $m$ is observed, and the number of counts $N$ is measured with one of the methods descibed in \cref{ssec:photometry}. Then, $m_\text{ZP}$ can be computed from \cref{eq:magnitude-zero-point}.
+The magnitudes of many photometric standard stars in various bands are shown in \cref{tab:photometric-standard-stars}.
 
 Then, a source with unknown magnitude $m$ is observed, and its number of counts $N$ is measured. Using the magnitude zero-point calculated before, the apparent magnitude $m$ of the source can be computed using again \cref{eq:magnitude-zero-point}.
 
@@ -1809,7 +1855,8 @@ If this is not possible, then the standard star can be observed in a different i
 
 
 
-\subsection{\textsc{Psf} \& seeing estimation}
+\subsection{Point-spread function \& seeing estimation}
+\label{ssec:psf-seeing-estimation}
 
 Different experiments may require an estimate of the image's point spread function (\textsc{psf}), which is the telescope's response to a point source, such as a star.
 In the absence of atmospheric turbulence, this closely resembles an Airy pattern. 
@@ -1912,7 +1959,11 @@ This happens in open clusters or globular clusters, which are concentration of s
 
 \subsection{Recommended reading}
 
-Chapter 3 in \emph{Astrophysics for Physicists}\autocite{Choudhuri} and chapters 8.2, 10.6, 13, 15.1, 16.1, and 16.2 in \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}.
+\begin{itemize}
+    \item Chapter 3 in \emph{Astrophysics for Physicists}\autocite{Choudhuri}, and
+    \item chapters 8.2, 10.6, 13, 15.1, 16.1, and 16.2 in \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}.
+\end{itemize}
+
 
 \subsection{Aim of the experiment}
 
@@ -1927,6 +1978,7 @@ The aim of the experiment is to build an \textsc{hr} diagram using either open c
 \end{enumerate}
 
 \subsection{Data analysis}
+\label{ssec:hr-data-analysis}
 
 After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
 The standard star is then used to measure the magnitude zero-point of each image in each band.
@@ -2022,68 +2074,69 @@ They can perform these tasks using the \software{Python} packages `photutils' an
 
 Similar steps need to be performed on the standard star image in order to measure its instrumental magnitude and therefore the magnitude zero-point of the image.
 
-\section{Star-formation rate of galaxies with the Hα line}
+\section{Star-formation rate in galaxies via the Hα line}
+\label{sec:star-formation-rate}
 
-\subsection{Brief theory}
-
-Different kind of galaxies produce stars at different rates during the course of their lifetime.
-The amount of stars produced by galaxies is generally defined as star-formation rate (SFR) and it indicates the amount of stars in units of solar masses produced per year.
-Elliptical galaxies generally have a low SFR, while spiral galaxies a higher one.
-Star-formation occurs in the dense regions of molecular clouds, i.e. regions where molecular hydrogen is available.
-When stars ignite their hydrogen burning in the core, they emit a large number of ionizing photons that ionize the sorrounding medium giving rise to the so-called HII regions (Figure \ref{fig:hiiregions}).
-
-\begin{figure}[t!]
+\begin{figure}
     \centering
-    \includegraphics[width=12cm]{m101.jpg}
-    \caption{M101 and its HII regions of ongoing star-formation.
-        Credits to George Golitzin (\url{https://www.cloudynights.com/topic/333679-hii-regions-in-m101/}).
-    }
+    \includegraphics[width=0.7\textwidth]{m101.jpg}
+    \caption{M101 and its HII regions of ongoing star-formation, from George Golitzin (\url{https://www.cloudynights.com/topic/333679-hii-regions-in-m101/}).}
     \label{fig:hiiregions}
 \end{figure}
 
-An indicator for the ongoing star-formation in galaxies is the Hα luminosity.
-During the formation of stars, especially heavy ones, a great amount of ionizing photons is produced.
-These can ionize the surrounding hydrogen gas.
-When the protons and electrons recombine, they might recombine into an exited state instead of into the hydrogen ground state.
-By emitting photons, these exited states can fall back to the ground state.
-The Hα line corresponds to the n=3 to n=2 transition in the Balmer series and it emits a photon at a wavelength of 656.28 nm.
-By measuring the Hα luminosities in galaxies and using the calibrated relations between luminosities and star-formation rates, we can measure the ongoing SFR in galaxies in units of solar masses per year.
+\subsection{Theory}
+Different types of galaxies exhibit varying star-formation rates (\textsc{sfr}).
+The star formation rate $\dot{M}_\star$ is defined as the mass of new stars formed per year,
+usually measured in solar masses per year, written \si{\Msun\per\year}.
+Typically, elliptical galaxies show low \textsc{sfr}s, while spiral galaxies show high \textsc{sfr}s.
+Star formation is initiated in dense regions of molecular clouds, where molecular hydrogen is present.
 
-Further references students need to read for the experiment are chapters 6.6, 6.6.4, 9.1,9.2 in \emph{Astrophysics for Physicists}\autocite{Choudhuri}, chapter 25 in \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}, chapters 3.1, 3.3.1, 3.3.2, 3.9.4, 3.9.5 in \emph{Extragalactic Astronomy and Cosmology}\autocite{Schneider2006ExtragalacticAstronomy}, \url{https://ned.ipac.caltech.edu/level5/Sept12/Calzetti/Calzetti1_2.html} and \url{https://ned.ipac.caltech.edu/level5/Sept01/Rosa/frames.html}
+The ignition of hydrogen burning in stellar cores releases high-energy photons, which can ionize the surrounding medium, creating H\textsc{ii} regions as in \cref{fig:hiiregions}.
+The de-excitation process emits photons, with the Hα line specifically corresponding to the transition from $n=3$ to $n=2$ in the Balmer series, producing a photon of wavelength \SI{656.28}{\nano\meter}.
+Thus, the Hα luminosity acts as a proxy for active star formation in galaxies.
 
-\subsection{Aim of the experiment}
+By quantifying the Hα luminosity in galaxies and applying established luminosity-\textsc{sfr} calibrations, the \textsc{sfr} in units of solar masses per year can be estimated.
 
-The aim of the experiment is to measure the SFR of a sample of local spiral galaxies using the Hα line.
-Students need to identify suitable targets for the experiment using e.g., the Nasa Extragalactic database search feature \url{https://ned.ipac.caltech.edu/byparams}.
-During the observations, students need to collect the calibration images (bias, dark, flat) and images of their targets in the Hα-band.
-Students need also to collect images of a standard star to estimate the photometric zero-point.
-Once data are collected, students perform a data reduction and data analysis to measure the flux from the HII regions, convert it into luminosities using the distance to the object and then measure the SFR using the empirical relation between luminosity in Hα and SFR.
+Recommended reading: 
+\begin{itemize}
+    \item \emph{Astrophysics for Physicists}\autocite{Choudhuri}: Chapters 6.6, 6.6.4, 9.1, 9.2
+    \item \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}: Chapter 25
+    \item \emph{Extragalactic Astronomy and Cosmology}\autocite{Schneider2006ExtragalacticAstronomy}: Chapters 3.1, 3.3.1, 3.3.2, 3.9.4, 3.9.5
+    \item Calibrations to determine the star-formation rate from the Hα luminosity can be found in several review papers.\autocite{StarFormationCalzetti2013,StarFormationGonzalez2002} % eq. 1.10 and eq. 2, respectively
+\end{itemize}
+
+\subsection{Objectives}
+
+The aim of the experiment is to estimate the star formation rate of a sample of local spiral galaxies, by measuring their Hα luminosity.
+
+
+\subsection{Observing strategy}
+Identify suitable targets for the experiment using for example the \textsc{nasa} extragalactic database search feature \footnote{\url{https://ned.ipac.caltech.edu/byparams}}.
+
+Collect calibration images (bias, dark, flat), images of the target galaxies in the Hα-band, and images of a photometric standard star in the Hα and R band.
 
 \subsection{Data Analysis steps}
 
-After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
-The standard star is then used to measure the magnitude zero-point of each image in each band.
-This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
+% After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
+% The standard star is then used to measure the magnitude zero-point of each image in each band.
+% This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
 
-For this experiment, students need to measure the flux from HII regions in the spiral galaxies.
-They can perform these tasks using the \software{Python} packages `photutils' and `\software{astropy}':
+% For this experiment, students need to measure the flux from HII regions in the spiral galaxies.
+% They can perform these tasks using the \software{Python} packages `photutils' and `\software{astropy}':
+Most of the steps in \cref{section:data_red_steps} need to be performed:
 \begin{itemize}
-    \item Perform source detection: following \url{https://photutils.readthedocs.io/en/stable/detection.html}, students need to detect and extract sources from the image.
-          The provided positions of the objects are in pixel units.
-    \item
-          Perform photometry: students need to measure the flux from HII regions in the
-          Hα-band following
-          \url{https://photutils.readthedocs.io/en/stable/aperture.html}.
-    \item
-          Estimate luminosity: students need to measure Hα luminosities using fluxes and
-          distances from galaxies.
-    \item
-          Star-formation rate: using the calibrated relation between luminosity and
-          star-formation rate, students need to measure the latter and compare it to
-          literature values.
-\end{itemize}
+    \item Correct each science image with dark frames and flat frames (\cref{ssec:dark-flat-correction})
+    \item Remove cosmic rays from each science image (\cref{ssec:cosmic-ray-rejection})
+    \item Estimate and subtract the background from each science image. Be careful to not subtract part of the galaxy, which can be easily mistaken as part of the background by the algorithms. (\cref{ssec:background-subtraction})
+    \item Align and stack the science images (\cref{ssec:alignment} and \cref{ssec:stacking})
+    \item Perform photometric calibration by determining the photometric zero-point of the galaxy images (\cref{ssec:photometric-calibration}).
 
-Similar steps to those highlighted in Section 7.1.3 need to be performed on the standard star image in order to measure its instrumental magnitude and therefore the magnitude zero-point of the image.
+    Since I have not found any surveys of the Hα magnitudes of standard stars, this can be estimated by measuring the standard star both in the Hα and R band, and assuming that the spectrum of the star is approximately flat in the R band.
+
+    First, calibrate the photometric zero-point of the R band images. Then, calculate the ratio of two the fluxes of the standard star in the Hα and R band, and use this ratio to calibrate the photometric zero-point of the Hα band images.
+    This is not an exact method, but it should be sufficient for this experiment.
+    \item Finally, the Hα magnitude of some strong H\textsc{ii} regions in the glaxy are measured using aperture photometry (\cref{ssec:photometry}), and the measured flux is used to estimate the star formation rate, following the calibrations from the literature in the \emph{Recommended reading} section above.
+\end{itemize}
 
 \section{Galaxy morphology with \software{GALFIT}}
 
