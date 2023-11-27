@@ -1592,8 +1592,17 @@ The webcam is also connected by the \textbf{Observatory} window (e.g. see \cref{
 \part{Data analysis}
 
 \chapter{Data analysis}
+\label{section:data_red_steps}
 
 This chapter, based on version 1.1 of the manual by Luca Tortorelli\autocite{Tortorelli2015_DataReduction}, gives an overview on how to go from the raw images to the fully calibrated ones.
+
+Unless otherwise noted, all code snippets are in \software{Python}.
+
+\begin{important}
+    Go through the steps one by one, as far as they are required for your experiment.
+    After each step, check at least a few images (e.g. in \texttt{DS9}) to make sure that the result is what you expect.
+    Many mistakes can be spotted early that way, and you can save a lot of time.
+\end{important}
 
 \section{Software installation}
 It is recommended to install \software{Python} for the data analysis, and \software{DS9} to view \texttt{FITS} images.
@@ -1650,19 +1659,11 @@ More details can be found in the documentation\footnote{\texttt{Source Extractor
 % \textbf{Linux} users have to follow the instructions on the website \url{https://www.astromatic.net/software/swarp}.
 
 
-\section{Data Reduction Steps}
-\label{section:data_red_steps}
 
-In this section, we go through the data reduction steps with some example code.
-Unless otherwise noted, all code snippets are in \software{Python}.
 
-\begin{important}
-    Go through the steps one by one, as far as they are required for your experiment.
-    After each step, check at least a few images (e.g. in \texttt{DS9}) to make sure that the result is what you expect.
-    Many mistakes can be spotted early that way, and you can save a lot of time.
-\end{important}
 
-\subsection{Reading FITS files}
+\section{Reading \textsc{fits} files}
+\label{sec:reading-fits-files}
 
 Images can be read with the \software{astropy} package.
 \begin{minted}{python}
@@ -1683,12 +1684,15 @@ To store a numpy array as a fits file, you can use:
     fits.writeto('out_image_path', data, head, overwrite=True)
 \end{minted}
 
-\subsection{Dark Subtraction and Flat Fielding Correction}
+\section{Dark subtraction and flat field correction}
 \label{ssec:dark-flat-correction}
+
+% TODO add more explanations here, add code, and make it more explicit.
 
 The bias, dark subtraction and the flat fielding correction are applied to the 'raw science frame' according to the following:
 \begin{equation}
-    \mathrm{science\ frame} = \frac{\mathrm{raw\ science\ frame} - \mathrm{master\ dark} }{\mathrm{master\ flat} / \left \langle \mathrm{master\ flat} \right \rangle} \label{correction}
+    \label{eq:correction}
+    \text{science frame} = \frac{\text{raw science frame} - \text{master dark} }{\text{master flat} / \langle \text{master flat} \rangle} 
 \end{equation}
 `science frame' refers to the `raw science frame' after bias, dark subtraction and flat fielding correction.
 `master bias' refers to the median image of all the bias frames. 'master dark' refers to the median image of all the 'dark for science' images, the latter being subtracted for the `master bias'. 'master flat' refers to the median image of all the flat images after 'dark for flats' subtraction and `master bias' subtraction. $ \left \langle \mathrm{master\ flat} \right \rangle$ is the mean value of the 'master flat' image.
@@ -1703,9 +1707,9 @@ Then you simply run
 The variable 'median image' will contain the median of the electronic counts of the different images pixels.
 
 
-Once you create the different median images, you can perform the dark subtraction and the flat fielding corrections as in \ref{correction}.
+Once you create the different median images, you can perform the dark subtraction and the flat fielding corrections as in \cref{eq:correction}.
 
-\subsection{Cosmic Ray Rejection}
+\section{Cosmic ray rejection}
 \label{ssec:cosmic-ray-rejection}
 Cosmic rays usually appear as single saturated pixels in the image, wheras stars are extended objects.
 Cosmic ray rejection, i.e. the process of automatically detecting and removing cosmic rays, can be performed with Astroscrappy\footnote{\url{https://github.com/astropy/astroscrappy}} or \software{cosmics.py}\footnote{\url{https://obswww.unige.ch/~tewes/cosmics_dot_py/}}.
@@ -1732,7 +1736,7 @@ The code above is only an example and may have to be modified to your needs.
 \end{minted}
 The code above is only an example and may have to be modified to your needs.
 
-\subsection{Background Subtraction}
+\section{Background subtraction}
 \label{ssec:background-subtraction}
 
 The background can be caused by light pollution, natural skyglow, moonlight, clouds etc.
@@ -1756,7 +1760,7 @@ The background should now be centered around zero counts, while the astronomical
 
 Once you have found good parameters, you can usually use the same parameters for all images of the same object.
 
-\subsection{Astrometric Calibration}
+\section{Astrometric calibration}
 \label{ssec:astrometric-calibration}
 
 Astrometric calibration refers to the process of finding a mapping from the $(x,y)$ position of each pixel in an image to astronomical coordinates such as $(\text{ra}, \text{dec})$.
@@ -1773,7 +1777,7 @@ It will return the input images, but with the astrometric calibration informatio
 
 Other solver exist and may be added to the manual at some point.
 
-\subsection{Alignment}
+\section{Alignment}
 \label{ssec:alignment}
 
 The \texttt{astroalign} module finds similar 3 point asterisms in an input and reference image and computes the affine transformation between them.
@@ -1792,7 +1796,7 @@ Conveniently, no astrometric solution is required for \software{astroalign} to w
 % TODO provide alignment method when astrometric solution exists
 
 
-\subsection{Stacking}
+\section{Stacking}
 \label{ssec:stacking}
 
 Stacking consists of combining several astronomical images, with the goal of reducing random noise and events, and improving signal-to-noise ratio.
@@ -1805,7 +1809,7 @@ To stack a list of images, we recommend either using the median or a sigma-clipp
 \end{minted}
 If a mean is used instead, artifacts like cosmis rays and satellite trails will still be visible in the stacked image, while a median or a sigma-clipped mean will reject outliers.
 
-\subsection{Source extraction}
+\section{Source extraction}
 \label{ssec:source-extraction}
 
 Source extraction is the process of detecting sources, such as stars or galaxies, in an image
@@ -1816,23 +1820,32 @@ If there are only few sources present, the manual method is feasible, but when d
 
 % TODO: a Python module/API would be nice for automatic source extraction would be nice.
 
-\subsection{Photometry}
+\section{Photometry}
 \label{ssec:photometry}
 
 Photometry refers to the process of measuring the flux from sources in an image.
 Sometimes, photometry is included in the source extraction, such as with \software{source extractor}.
 
+\subsection{Aperture photometry}
+\label{ssec:aperture-photometry}
 A popular method is \emph{aperture photometry}, where a \enquote{disk} with a specified radius is placed at the center of the source, and all counts within that disk are summed up.
 To correct for the background, the counts in an annulus (ring) a bit further around the source can be summed up and subtracted from the source flux.
 
 To measure the number of counts in a region using aperture photometry, you can use \texttt{astropy}'s \texttt{photutils}\footnote{\url{https://photutils.readthedocs.io/en/stable/aperture.html}} package.
 
+\subsection{Point-spread function photometry}
+\label{ssec:psf-photometry}
+
 An alternative method is to fit the 2D intensity profile of the sources.
-For a star, that means fitting the point spread function (\textsc{psf}) to the image, as described in \cref{ssec:psf-seeing-estimation}, and then calculating the total brightness of the \textsc{psf}.
+For a star, that means fitting the point spread function (\textsc{psf}) to the image, similar to the description \cref{ssec:psf-seeing-estimation}, and then calculating the total brightness of the \textsc{psf}.
+You can use \texttt{astropy}'s \texttt{photutils}\footnote{\url{https://photutils.readthedocs.io/en/stable/psf.html}} for finding and fitting the \textsc{psf}.
+
+
+\subsection{Photometry via fitting a model for extended sources}
 Extended sources such as galaxies require a different approach, as they are not point sources, and software such as \software{GALFIT} can be used.
 
 
-\subsection{Photometric Calibration}
+\section{Photometric calibration}
 \label{ssec:photometric-calibration}
 
 The photometric zero-point $m_\text{ZP}$ of an image is defined as
@@ -1855,7 +1868,7 @@ If this is not possible, then the standard star can be observed in a different i
 
 
 
-\subsection{Point-spread function \& seeing estimation}
+\section{Point-spread function \& seeing estimation}
 \label{ssec:psf-seeing-estimation}
 
 Different experiments may require an estimate of the image's point spread function (\textsc{psf}), which is the telescope's response to a point source, such as a star.
@@ -1908,10 +1921,9 @@ telluric line removal - stars with few lines, i.e. quickly rotating B stars
 
 fitting of spectral lines
 
-\part{Experiments and Projects}
+\part{Experiments and projects}
 
-\chapter{\textsc{Vp}
-  Experiments}
+\chapter{\textsc{Vp} experiments}
 
 This section describes the experiments that can be performed with the \textsc{hpp} telescope as part of the \textsc{vp}, with topics ranging from the solar system to extragalactic observations.
 
@@ -1920,10 +1932,11 @@ The data reduction procedure proposed in this manual is based on a few command-l
 
 Generally recommended readings are listed below:
 \begin{itemize}
-    \item Chapter 1 of \emph{Astrophysics for Physicists}\autocite{Choudhuri}, \item chapters 1, 3, and 6 of \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}, \item some of the online lecture notes\footnote{\url{http://slittlefair.staff.shef.ac.uk/teaching/phy241/}}\footnote{\url{https://quanz-group.ethz.ch/education/lectures/astrophysics-I-hs2019.html}} \item The \emph{CCDobservations manual}\footnote{\url{https://ethz.ch/content/dam/ethz/special-interest/phys/particle-physics/quanz-group-dam/documents-old-s-and-p/Courses/vp-asl-astro/CCDobservations.pdf}} contain details about detectors, photometry, and spectroscopy.
-    \item
-          This manual contains a section on data reduction,
-          \cref{section:data_red_steps}.
+    \item Chapter 1 of \emph{Astrophysics for Physicists}\autocite{Choudhuri}, \item chapters 1, 3, and 6 of \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction},
+    \item some online lecture notes\footnote{\url{http://slittlefair.staff.shef.ac.uk/teaching/phy241/}}%\footnote{\url{https://quanz-group.ethz.ch/education/lectures/astrophysics-I-hs2019.html}}
+    \item The \emph{CCD observations manual}\footnote{\url{https://ethz.ch/content/dam/ethz/special-interest/phys/particle-physics/quanz-group-dam/documents-old-s-and-p/Courses/vp-asl-astro/CCDobservations.pdf}} contains details about detectors, photometry, and spectroscopy.
+    \item This manual contains a section on data reduction, \cref{section:data_red_steps}.
+    \item A large amount of useful information, overviews, and data such as magnitudes of many objects, can be found in \emph{Allen's Astrophysical Quantities}\autocite{AllensAstrophysicalQuantities}. It can replace Wikipedia in many instances and usually contains more details, while being more reliable and traceable to the original sources. It also contains references to further literature if more details are required.
 \end{itemize}
 
 \section{The Hertzsprung-Russell diagram of star clusters}
@@ -1934,13 +1947,13 @@ Generally recommended readings are listed below:
     \label{fig:hrdiagram}
 \end{wrapfigure}
 
-\subsection{Brief theory}
+\subsection{Theory}
 
 Stars show a large variety of luminosities and effective temperatures.
-A \textsc{hr} diagram, shown in \cref{fig:hrdiagram}, is a scatter plot of stellar luminosity and effective temperature for a large sample of stars.
+A Hertzsprung-Russel (\textsc{hr}) diagram, shown in \cref{fig:hrdiagram}, is a scatter plot of stellar luminosity and effective temperature for a large sample of stars.
 The location of a star in the \textsc{hr} diagram varies with the lifetime of a star during its evolution, and is mostly determined by its initial mass when it starts burning hydrogen through nuclear fusion reactions.
 
-Stars spend most of their lifetime on the Main Sequence (the diagonal line in \cref{fig:hrdiagram}).
+Stars spend most of their lifetime on the Main Sequence, which is the diagonal line in \cref{fig:hrdiagram}.
 The specific position on the Main Sequence is determined by the mass of the star.
 On the Main Sequence, stars fuse hydrogen in their cores to helium through nuclear fusion reactions.
 The larger the mass of the star, the shorter the time a star spends on the Main Sequence.
@@ -1952,7 +1965,7 @@ explode as core-collapse supernovae.
 Estimating a star's luminosity and effective temperature is not an easy task, as it involves determining the star's luminosity, while only its apparent brightness can be seen through the telescope.
 The \textsc{hr} diagram is usually represented as a colour-magnitude diagram.
 The absolute magnitude is a proxy for the luminosity, and the colour a proxy for the surface temperature.
-Usually, the observed \textsc{hr} diagram is plotted as absolute magnitude in the V-band as a function of the B - V colour.
+Usually, the observed \textsc{hr} diagram is plotted as absolute magnitude in the V-band as a function of the B-V colour.
 To estimate the absolute magnitude, one needs to know the distance to the star.
 However, if all the stars that are examined are at the same distance, the absolute magnitude can be substituted by the apparent magnitude.
 This happens in open clusters or globular clusters, which are concentration of stars in well defined region of space, where we can assume that each star has the same distance to the observer.
@@ -1960,8 +1973,8 @@ This happens in open clusters or globular clusters, which are concentration of s
 \subsection{Recommended reading}
 
 \begin{itemize}
-    \item Chapter 3 in \emph{Astrophysics for Physicists}\autocite{Choudhuri}, and
-    \item chapters 8.2, 10.6, 13, 15.1, 16.1, and 16.2 in \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}.
+    \item \emph{Astrophysics for Physicists}\autocite{Choudhuri}: Chapter 3 
+    \item \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}: Chapters 8.2, 10.6, 13, 15.1, 16.1, and 16.2
 \end{itemize}
 
 
@@ -1969,57 +1982,46 @@ This happens in open clusters or globular clusters, which are concentration of s
 
 The aim of the experiment is to build an \textsc{hr} diagram using either open clusters or globular clusters, and to identify the different evolutionary stages of stars on the \textsc{hr} diagram.
 
-\subsection{Observation strategy}
+\subsection{Observing strategy}
 \begin{enumerate}
-    \item Indentify suitable targets for the experiment using either lists of open clusters (e.g., \url{https://en.wikipedia.org/wiki/List_of_open_clusters}) or the Nasa Extragalactic database search feature \url{https://ned.ipac.caltech.edu/byparams}.
+    \item Indentify suitable targets for the experiment using either lists of open clusters, such as on Wikipedia\footnote{\url{https://en.wikipedia.org/wiki/List_of_open_clusters}}, or the \textsc{Nasa} Extragalactic database search feature\footnote{\url{https://ned.ipac.caltech.edu/byparams}}.
     \item Take calibration images (darks, flats, flat darks)
     \item Take images of the target cluster in the B and V bands.
-    \item Take images of a nearby standard star for photometric calibration.
+    \item Take images of a nearby standard star in the B and V bands for photometric calibration.
 \end{enumerate}
 
 \subsection{Data analysis}
 \label{ssec:hr-data-analysis}
 
-After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
-The standard star is then used to measure the magnitude zero-point of each image in each band.
-This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
+Most of the steps in \cref{section:data_red_steps} should be followed.
 
-For this experiment, students need to measure the magnitudes for each star belonging to the star cluster.
-They can perform these tasks using the \software{Python} packages \software{photutils} and \software{astropy}:
+% The standard star is then used to measure the magnitude zero-point of each image in each band.
+% This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
+
+% For this experiment, students need to measure the magnitudes for each star belonging to the star cluster.
+% They can perform these tasks using the \software{Python} packages \software{photutils} and \software{astropy}:
+
 \begin{itemize}
-    \item Perform source detection: following \url{https://photutils.readthedocs.io/en/stable/detection.html}, students need to detect and extract sources from the image.
-          The provided positions of the objects are in pixel units.
-    \item
-          Convert pixel to sky coordinates: following
-          \url{https://docs.astropy.org/en/stable/wcs/}, students need to convert the
-          pixel coordinates of sources into sky coordinates, i.e.
-          Right ascension (RA) and Declination (DEC) at J2000.
-    \item
-          Match with external catalogue: in order to know which stars belong to the star
-          cluster, students need to download a reference catalogue for the star cluster
-          from \url{http://vizier.u-strasbg.fr/viz-bin/VizieR} and match this catalogue
-          with the detected sources via sky coordinates, following
-          \url{https://docs.astropy.org/en/stable/coordinates/matchsep.html}.
-    \item
-          Perform photometry: students need to measure magnitudes in the B and V bands
-          for each star belonging to the star cluster following
-          \url{https://photutils.readthedocs.io/en/stable/psf.html}.
-    \item
-          Plot the HR diagram: students need to plot the HR diagram using the measured
-          magnitudes and identify the different evolutionary stages on it.
-          If the single star cluster contains few stars, then different star clusters stars may be put on the same plot, provided that their absolute magnitude has been estimated.
+    \item Correct each science image with dark frames and flat frames (\cref{ssec:dark-flat-correction})
+    \item Remove cosmic rays from each science image (\cref{ssec:cosmic-ray-rejection})
+    \item Estimate and subtract the background from each science image. Be careful to not subtract part of the cluster, which can be easily mistaken as part of the background by the algorithms. (\cref{ssec:background-subtraction})
+    \item Align and stack the science images (\cref{ssec:alignment} and \cref{ssec:stacking})
+    \item Determine the photometric zero-point of the cluster images (\cref{ssec:photometric-calibration}), using observations of the standard stars.
+    \item Perform source detection to find the coordinates of stars in the cluster (\cref{ssec:source-extraction})\footnote{To perform source detection in Python: \url{https://photutils.readthedocs.io/en/stable/detection.html}}
+    \item (If not done already) Astrometrically calibrate the images (\cref{ssec:astrometric-calibration}), such that each pixel has a specific sky position assigned.\footnote{Useful for astrometric calibration: \url{https://docs.astropy.org/en/stable/wcs/}}
+    \item Match with an external catalog to identify which stars belong to the cluster, and which stars to exclude since they are foreground or background stars.\footnote{Star catalog: \url{http://vizier.u-strasbg.fr/viz-bin/VizieR}. Matching detected sources with the star catalog: \url{https://docs.astropy.org/en/stable/coordinates/matchsep.html}}
+    \item (If not done already) Perform photometry on the cluster stars to determine their B and V magnitudes, for example using point-spread function photometry, see \cref{ssec:psf-photometry}.
+    \item Finally, plot the \textsc{hr} diagram, and identify the evolutionary stages of the stars. If images of multiple clusters were taken, then they can be combined in a single plot, provided that their absolute magnitude has been estimated.
 \end{itemize}
-
-Similar steps need to be performed on the standard star image in order to measure its instrumental magnitude and therefore the magnitude zero-point of the image.
 
 \section{Period-Luminosity relation of Cepheids}
 
-\subsection{Brief theory}
+\subsection{Theory}
 
 Cepheids are a class of pulsating stars that vary their luminosity in a periodic way.
 The luminosity of these objects depends only on the size and composition (metallicity) of the star.
 These stars are not located on the Main Sequence of stars of the Hertzsprung-Russell (HR) diagram.
-Indeed, they oscillate between the Main sequence and the instability strip (Figure \cref{fig:cepheid-lightcurve}).
+Indeed, they oscillate between the Main sequence and the instability strip (\cref{fig:cepheid-lightcurve}).
 Being Cepheids rare, their pulsation is a transient phenomenon.
 
 Several mechanisms can produce stellar pulsations.
@@ -2038,41 +2040,39 @@ Cepheids are indeed called standard candles.
     \label{fig:cepheid-lightcurve}
 \end{figure}
 
-Further references students need to read are chapter 2.2.7 in \emph{Extragalactic Astronomy and Cosmology}\autocite{Schneider2006ExtragalacticAstronomy} and chapter 8.2, 10.6, 13, 14 in \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}.
+\subsection{Recommended reading}
+\begin{itemize}
+     \item \emph{Extragalactic Astronomy and Cosmology}\autocite{Schneider2006ExtragalacticAstronomy}: Chapter 2.2.7
+     \item \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}: Chapters 8.2, 10.6, 13, 14
+ \end{itemize}
 
 \subsection{Aim of the experiment}
 
-The aim of the experiment is to estimate the distance to the Cepheid stars using the calibrated period-luminosity relation in the V-band.
-Students need to identify suitable targets for the experiment using e.g., the Nasa Extragalactic database search feature\footnote{\url{https://ned.ipac.caltech.edu/byparams}}.
-During the observations, students need to collect the calibration images (bias, dark, flat) and images of their targets in the V-band.
-Students need also to collect images of a standard star to estimate the photometric zero-point.
-Students need to create the light curve of Cepheid variables, therefore multiple nights of observations are required for this experiment.
-Once data are collected, students perform a data reduction and data analysis to estimate the period from the light curve and then the distance to the star through the period-luminosity relation.
+The aim of the experiment is to estimate the distance to a sample of Cepheids using the calibrated period-luminosity relation in the V-band.
 
-\subsection{Data Analysis steps}
+\subsection{Observing strategy}
 
-After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
-The standard star is then used to measure the magnitude zero-point of each image in each band.
-This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
+\begin{enumerate}
+    \item Identify suitable targets for the experiment using e.g., the Nasa Extragalactic database search feature\footnote{\url{https://ned.ipac.caltech.edu/byparams}}.
+    \item Collect calibration images (darks, flats, flat darks)
+    \item Collect images of the target Cepheids as well as photometric standard stars in the V-band. Multiple nights of observations are required to get the light curves.
+\end{enumerate}
 
-For this experiment, students need to measure the magnitudes as a function of time (epochs) for each Cepheid star.
-They can perform these tasks using the \software{Python} packages `photutils' and `\software{astropy}':
+
+\subsection{Data analysis}
+
+Most of the steps in \cref{section:data_red_steps} have to be performed.
+
 \begin{itemize}
-    \item Perform source detection: following \url{https://photutils.readthedocs.io/en/stable/detection.html}, students need to detect and extract sources from the image.
-          The provided positions of the objects are in pixel units.
-    \item
-          Perform photometry: students need to measure the Cepheid magnitudes in V-band
-          for the multiple epochs following
-          \url{https://photutils.readthedocs.io/en/stable/psf.html}.
-    \item
-          Period: students need to plot the light curve of Cepheids and measure their
-          pulsation period.
-    \item
-          Distance: using the calibrated period-luminosity relation in the V-band,
-          students need to measure the distance to each Cepheid variable.
+    \item Correct each science image with dark frames and flat frames (\cref{ssec:dark-flat-correction})
+    \item Remove cosmic rays from each science image (\cref{ssec:cosmic-ray-rejection})
+    \item Estimate and subtract the background from each science image (\cref{ssec:background-subtraction}).
+    \item Align and stack the science images (\cref{ssec:alignment} and \cref{ssec:stacking}).
+    \item Determine the photometric zero-point of Cepheid images (\cref{ssec:photometric-calibration}), using observations of the photometric standard stars.
+    \item Perform photometry on the Cepheid to determine its V-band magnitude, for example using \software{photutils}' \software{PSF} photometry (\cref{ssec:psf-photometry}).
+    \item Plot the V-band magnitude of the Cepheid and calculate its pulsation period.
+    \item Using the calibrated period-luminosity relation, estimate the distance to the Cepheid.
 \end{itemize}
-
-Similar steps need to be performed on the standard star image in order to measure its instrumental magnitude and therefore the magnitude zero-point of the image.
 
 \section{Star-formation rate in galaxies via the Hα line}
 \label{sec:star-formation-rate}
@@ -2097,7 +2097,7 @@ Thus, the Hα luminosity acts as a proxy for active star formation in galaxies.
 
 By quantifying the Hα luminosity in galaxies and applying established luminosity-\textsc{sfr} calibrations, the \textsc{sfr} in units of solar masses per year can be estimated.
 
-Recommended reading: 
+\subsection{Recommended reading}
 \begin{itemize}
     \item \emph{Astrophysics for Physicists}\autocite{Choudhuri}: Chapters 6.6, 6.6.4, 9.1, 9.2
     \item \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}: Chapter 25
@@ -2105,24 +2105,18 @@ Recommended reading:
     \item Calibrations to determine the star-formation rate from the Hα luminosity can be found in several review papers.\autocite{StarFormationCalzetti2013,StarFormationGonzalez2002} % eq. 1.10 and eq. 2, respectively
 \end{itemize}
 
-\subsection{Objectives}
+\subsection{Aim of the experiment}
 
 The aim of the experiment is to estimate the star formation rate of a sample of local spiral galaxies, by measuring their Hα luminosity.
 
 
 \subsection{Observing strategy}
-Identify suitable targets for the experiment using for example the \textsc{nasa} extragalactic database search feature \footnote{\url{https://ned.ipac.caltech.edu/byparams}}.
+Identify suitable targets for the experiment using for example the \textsc{nasa} extragalactic database search feature\footnote{\url{https://ned.ipac.caltech.edu/byparams}}.
 
 Collect calibration images (bias, dark, flat), images of the target galaxies in the Hα-band, and images of a photometric standard star in the Hα and R band.
 
-\subsection{Data Analysis steps}
+\subsection{Data analysis}
 
-% After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
-% The standard star is then used to measure the magnitude zero-point of each image in each band.
-% This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
-
-% For this experiment, students need to measure the flux from HII regions in the spiral galaxies.
-% They can perform these tasks using the \software{Python} packages `photutils' and `\software{astropy}':
 Most of the steps in \cref{section:data_red_steps} need to be performed:
 \begin{itemize}
     \item Correct each science image with dark frames and flat frames (\cref{ssec:dark-flat-correction})
@@ -2130,17 +2124,16 @@ Most of the steps in \cref{section:data_red_steps} need to be performed:
     \item Estimate and subtract the background from each science image. Be careful to not subtract part of the galaxy, which can be easily mistaken as part of the background by the algorithms. (\cref{ssec:background-subtraction})
     \item Align and stack the science images (\cref{ssec:alignment} and \cref{ssec:stacking})
     \item Perform photometric calibration by determining the photometric zero-point of the galaxy images (\cref{ssec:photometric-calibration}).
-
-    Since I have not found any surveys of the Hα magnitudes of standard stars, this can be estimated by measuring the standard star both in the Hα and R band, and assuming that the spectrum of the star is approximately flat in the R band.
+    \footnote{Since I have not found any surveys of the Hα magnitudes of standard stars, this can be estimated by measuring the standard star both in the Hα and R band, and assuming that the spectrum of the star is approximately flat in the R band.
 
     First, calibrate the photometric zero-point of the R band images. Then, calculate the ratio of two the fluxes of the standard star in the Hα and R band, and use this ratio to calibrate the photometric zero-point of the Hα band images.
-    This is not an exact method, but it should be sufficient for this experiment.
-    \item Finally, the Hα magnitude of some strong H\textsc{ii} regions in the glaxy are measured using aperture photometry (\cref{ssec:photometry}), and the measured flux is used to estimate the star formation rate, following the calibrations from the literature in the \emph{Recommended reading} section above.
+    This is not an exact method, but it should be sufficient for this experiment.}
+    \item Finally, the Hα magnitude of some strong H\textsc{ii} regions in the glaxy are measured using aperture photometry (\cref{ssec:aperture-photometry}), and the measured flux is used to estimate the star formation rate, following the calibrations from the literature in the \emph{Recommended reading} section above.
 \end{itemize}
 
 \section{Galaxy morphology with \software{GALFIT}}
 
-\subsection{Brief theory}
+\subsection{Theory}
 
 Galaxies in the Universe show a wide range of morphologies.
 They range from spheroidal aggregation of stars such as elliptical galaxies to disk objects with spiral arms such as spiral galaxies to irregularly shaped galaxies resulting from interactions or feedback from the interstellar medium.
@@ -2157,114 +2150,110 @@ The visual morphological classification of galaxies is a task that requires a lo
 Even professional astronomers may find difficult to classify a galaxy, especially if the galaxy is far away and the resolution of the telescope is poor.
 An alternative way of morphologically classify a galaxy is by looking at its light distribution, i.e. the intensity of light as a function of the galaxy radius.
 The most general light profile distribution is the Sérsic light profile (Sérsic 1963) where the intensity of light scales as $I(R) \propto \exp(-b R^{1/n})$, with $n$ being the Sérsic index.
-Usually, $n$ is $\approx 4$ for elliptical galaxies and $\approx 1$ for spiral galaxies.
+Usually, $n \approx 4$ for elliptical galaxies, and $n \approx 1$ for spiral galaxies.
 Different softwares are available to measure the galaxy light profile.
 One of the more robust ones is \software{GALFIT}\autocite{Peng2010Galfit}, a two-dimensional fitting algorithm designed to extract
 structural components from galaxy images.
 
-Further references are
+\subsection{Recommended reading}
 \begin{itemize}
-    \item chapters 9.1 and 9.2 in \emph{Astrophysics for Physicists}\autocite{Choudhuri},
-    \item chapter 25 in \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction},
-    \item chapters 3.1, 3.2.1, 3.2.2, 3.2.3, 3.3.1, 3.3.2 in \emph{Extragalactic Astronomy and Cosmology}\autocite{Schneider2006ExtragalacticAstronomy},
-    \item the \software{GALFIT}\footnote{\url{https://users.obs.carnegiescience.edu/peng/work/galfit/galfit.html}} website with instructions and example files,
-    \item and a review article on galaxy morphology\autocite{Buta2013GalaxyMorphology}.
+    \item \emph{Astrophysics for Physicists}\autocite{Choudhuri}: Chapters 9.1 and 9.2
+    \item \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}: Chapter 25
+    \item \emph{Extragalactic Astronomy and Cosmology}\autocite{Schneider2006ExtragalacticAstronomy}: Chapters 3.1, 3.2.1, 3.2.2, 3.2.3, 3.3.1, 3.3.2
+    \item The \software{GALFIT} website\footnote{\url{https://users.obs.carnegiescience.edu/peng/work/galfit/galfit.html}} with instructions and example files,
+    \item A review article on galaxy morphology\autocite{Buta2013GalaxyMorphology}.
 \end{itemize}
 
 \subsection{Aim of the experiment}
 
 The aim of the experiment is to morphologically classify a sample of local elliptical and spiral galaxies using the software \software{GALFIT}.
-Students need to identify suitable targets for the experiment using e.g., the Nasa Extragalactic database search feature \url{https://ned.ipac.caltech.edu/byparams}.
-During the observations, students need to collect the calibration images (bias, dark, flat) and images of their targets in the B, V and R bands.
-Students need also to collect images of a standard star to estimate the photometric zero-point.
-Once data are collected, students perform a data reduction and data analysis to fit the galaxy light profiles with \software{GALFIT} and estimate the best-fitting total magnitude, half-light radius and Sérsic index.
-On the base of the Sérsic index value, students need to classify their galaxies and compare their classification with the literature one.
 
-\subsection{Data Analysis steps}
+\subsection{Observing strategy}
 
-After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
-The standard star is then used to measure the magnitude zero-point of each image in each band.
-This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
+\begin{enumerate}
+    \item Identify suitable targets for the experiment using e.g., the \textsc{nasa} extragalactic database\autocite{NasaExtragalacticDatabaseSearch}.
+    \item Collect calibration images (darks, flats, flat darks)
+    \item Collect images of the target galaxies in the B, V, and R bands. The experiment can also be performed with observations in only a single band, so it is recommended to first observe all targets in a single band, e.g. R.
+    \item Collect images of a photometric standard star in the B, V, and R bands for photometric calibration.
+\end{enumerate} 
+
+\subsection{Data analysis}
+
+Most of the steps in \ref{section:data_red_steps} have to be performed.
 
 For this experiment, students need to use \software{GALFIT} to fit the galaxy image with a Sérsic light profile following the examples in \url{https://users.obs.carnegiescience.edu/peng/work/GALFIT/GALFIT-ex.tar.gz} and the rules of thumb in \url{https://users.obs.carnegiescience.edu/peng/work/GALFIT/TOP10.html}.
-Students also needs to use `photutils' and `\software{astropy}' for specific tasks.
+
+
 \begin{itemize}
-    \item
-          Data reduction: images need to be photometrically and astrometrically
-          calibrated.
-    \item
-          Model of the PSF: \software{GALFIT} convolves the light profile with the
-          point-spread function (PSF) of the telescope+detector, therefore a model image
-          of the PSF needs to be created.
-          Students can follow \url{https://photutils.readthedocs.io/en/stable/epsf.html#build-epsf} to build a model of the PSF.
-    \item
-          Initial guess: an initial guess for the parameters of the Sérsic model needs
-          to be provided to \software{GALFIT}.
-          One example is to measure the magnitude and half-light radius in an elliptical aperture following \url{https://photutils.readthedocs.io/en/stable/isophote.html}.
-          An initial guess of n=2.5 is good enough for our purposes.
-    \item
-          galaxy fitting: students perform a galaxy image fitting with \software{GALFIT}.
-          They need to report the best-fitting parameters, together with the model and the residual images.
-          A morphological classification needs to be performed according to the best-fitting Sérsic index value.
+    \item Correct each science image with dark frames and flat frames (\cref{ssec:dark-flat-correction})
+    \item Remove cosmic rays from each science image (\cref{ssec:cosmic-ray-rejection})
+    \item Estimate and subtract the background from each science image. Be careful to not subtract part of the galaxy, which can be easily mistaken as part of the background by the algorithms. (\cref{ssec:background-subtraction})
+    \item Align and stack the science images (\cref{ssec:alignment} and \cref{ssec:stacking})
+    \item Perform photometric calibration by determining the photometric zero-point of the galaxy images (\cref{ssec:photometric-calibration}).
+    \item (Optional) Model the point-spread function (\textsc{psf}) of the image follwing the \software{photutils} documentation\footnote{\url{https://photutils.readthedocs.io/en/stable/epsf.html}}. The \textsc{psf} can be used to improve the fitting of the galaxy light profile.
+    \item Follow the example on the \software{GALFIT} webpage to familiarise yourself with the software. Going through the example will also give you a starting configuration that you can modify for your galaxy.
+    \item Fit the \textsc{2d} intensity profile of the galaxy with \software{GALFIT}. You have to supply some initial guesses for the parameters. Start with a single simple component and the background first, and modify the configuration until you get a good fit. Don't model spiral arms until you have an approximate fit for the bulge of the galaxy.
+    \item Report the best-fit magnitude, Sérsic index, and half-light radius (in parsec) of the galaxy. You can look up the distance to the galaxy in the literature or a database. Based on this information, classify the galaxy on the Hubble diagram.
 \end{itemize}
 
-Similar steps to those highlighted in Section 7.1.3 need to be performed on the standard star image in order to measure its instrumental magnitude and therefore the magnitude zero-point of the image.
-
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=12cm]{jupiter}
-    \caption{Jupiter and its moons from an amateur telescope.
-        Credits to Thomas Bresson and Rochus Hess.
-    }
-    \label{fig:jupyter}
-\end{figure}
 
 \section{Mass of Jupiter and Saturn}
 
-\subsection{Brief theory}
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{jupiter}
+    \caption{Jupiter and its moons, from an amateur telescope.
+        Credits to Thomas Bresson and Rochus Hess.
+    }
+    \label{fig:jupiter}
+\end{figure}
 
-The two largest planets of the Solar System, Saturn and Jupiter, are also the ones having the largest number of moons.
-By inspecting their orbital motion, it is possible to estimate the mass of these two gas giants.
-If we assume that the moons move on circular orbits around Jupiter and Saturn and if we assume that their mass is negligible with respect to the planet, then we can equate Newton's law
-\begin{equation}
-    F_G = G \frac{m_1 m_2}{r^2}
-\end{equation}
+\subsection{Theory}
+
+By inspecting the orbital motion of Jupiter's and Saturn's moons (\cref{fig:jupiter}), it is possible to estimate the mass of the planets.
+Assuming that the mass of the moons is small compared to the mass of the planet, then the gravitational force acting on each moon is
+\begin{equation*}
+    F_G = G \frac{M m}{r^2},
+\end{equation*}
 where $G$ is the gravitational constant,
-$m_1$ and $m_2$ the mass of the attracting bodies,
-r the distance between the two bodies, with the centripetal force
-\begin{equation}
-    F_C = m \omega^2 r
-\end{equation}
-where
-$m$ is the mass of the moving object,
-$\omega$ its angular velocity and
-$r$ the distance from the centre of its orbit.
-By equating them and using the relation between angular velocity and period for circular orbit we obtain
-\begin{equation}
-    \frac{T^2}{r^3} = \frac{4 \pi^2 G}{M}
-\end{equation}
-where $M$ is the mass of Jupiter or Saturn.
+$M$ is the mass of the planet,
+$m$ the mass of the moon,
+and $r$ the distance between the two.
 
-Further reference students need to read for the experiment is chapter 21 in \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}.
+If we further assume that the moons move on circular orbits around the planet, then the centripetal force that must be exerted on the moon is
+\begin{equation*}
+    F_C = m \omega^2 r,
+\end{equation*}
+where
+$\omega$ is the angular velocity of the moon.
+By equating the two formulas above, and using the relation between angular velocity $\omega$ and period $T$, we obtain
+\begin{equation}
+    \frac{T^2}{r^3} = \frac{4 \pi^2 G}{M}.
+\end{equation}
+Thus, the mass $M$ of a planet can be estimated from measurements of radius and period of its moons.
+
+\subsection{Recommended reading}
+\begin{itemize}
+    \item \emph{An Introduction to Modern Astrophysics}\autocite{carroll2017introduction}: Chapter 21
+\end{itemize}
+
 
 \subsection{Aim of the experiment}
 
-The aim of the experiment is to measure the mass of Jupiter and/or Saturn using their moon orbits \ref{fig:jupyter}.
+The aim of the experiment is to measure the mass of Jupiter and/or Saturn using their moon orbits.
 This experiment is not always available given the different relative positions of Sun, Earth and Jupiter/Saturn during the years.
 During the observations, students need to collect the calibration images (bias, dark, flat) and images of their targets in the B, V and R bands.
-Students need also to collect images of a standard star to estimate the photometric zero-point.
 They need to take multi-epoch observations of Jupiter/Saturn and their moons in order to reconstruct the orbit of the objects.
 Multiple days of observations are therefore required to obtain optimal results.
-Students need to perform a data reduction and analyse the data to estimate Jupiter/Saturn mass.
 
-\subsection{Data Analysis steps}
+\subsection{Observing strategy}
 
-After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
-The standard star is then used to measure the magnitude zero-point of each image in each band.
-This produces target images that have been astrometrically and photometrically calibrated, i.e. every pixel has a specific sky position assigned and the magnitude zero-point of the image is known.
+\subsection{Data analysis}
+
+After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps}.
 
 For this experiment, students need to measure the relative distances between the moons and the planet as a function of time.
-They can perform these tasks using the \software{Python} packages `photutils' and `\software{astropy}':
+They can perform these tasks using the \software{Python} modules `photutils' and \software{astropy}:
 \begin{itemize}
     \item Perform source detection: following \url{https://photutils.readthedocs.io/en/stable/detection.html}, students need to detect and extract sources from the image.
           The provided positions of the objects are in pixel units.
@@ -2283,9 +2272,9 @@ They can perform these tasks using the \software{Python} packages `photutils' an
           mass of Jupiter/Saturn together with the error on this estimate.
 \end{itemize}
 
-\section{Planetary Albedo}
+\section{Planetary albedo}
 
-\subsection{Brief Theory}
+\subsection{Theory}
 \label{subsection:albedo_theory}
 
 Planets do not emit significant light through nuclear reactions as the Sun does.
@@ -2315,7 +2304,10 @@ $R$ is the radius of the planet,
 $m$ is the apparent magnitude of the planet,
 and $m_{\odot}$ is the apparent magnitude of the sun.
 
-Further reference the students have to read is chapter 7 in \emph{Fundamental Astronomy}\autocite{Karttunen2016FundamentalAstronomy}.
+\subsection{Recommended reading}
+\begin{itemize}
+    \item \emph{Fundamental Astronomy}\autocite{Karttunen2016FundamentalAstronomy}: Chapter 7
+\end{itemize}
 
 \subsection{Aim of the experiment}
 
@@ -2325,7 +2317,9 @@ During the observations, students need to collect the calibration images (bias, 
 Students need also to collect images of a standard star to estimate the photometric zero-point.
 They then measure the calibrated apparent magnitudes and the geometric albedos in the B, V and R bands.
 
-\subsection{Data Analysis steps}
+\subsection{Observing strategy}
+
+\subsection{Data analysis}
 
 After data acquisition, students need to perform the data reduction steps described in Section \ref{section:data_red_steps} for both the actual targets and the standard star.
 The standard star is then used to measure the magnitude zero-point of each image in each band.
@@ -2334,7 +2328,7 @@ This produces target images that have been astrometrically and photometrically c
 For this experiment, students need to measure the albedos of planets.
 They can perform these tasks using the \software{Python} package `photutils':
 \begin{itemize}
-    \item Perform photometry: students need to measure the background subtracted fluxes from the planets following \url{https://photutils.readthedocs.io/en/stable/aperture.html}.
+    \item Perform photometry: students need to measure the background subtracted fluxes from the planets following \cref{ssec:aperture-photometry}.
           Then they can translate that into magnitudes using the photometric zero-point estimated from the standard star.
     \item
           Estimate the geometric albedo: using the formula in section
@@ -2385,7 +2379,11 @@ They can perform these tasks using the \software{Python} package `photutils':
 
 \appendix \addcontentsline{toc}{part}{Appendices}
 
-\chapter{List of Standard Stars}
+\chapter{List of photometric standard stars}
+\label{ch:photometric-standard-stars}
+
+\Cref{tab:photometric-standard-stars} is a list of photometric standard stars that can be used for photometric calibration, as described in \cref{ssec:photometric-calibration}.
+
 
 {\footnotesize
     \begin{longtable}{
@@ -2536,12 +2534,12 @@ They can perform these tasks using the \software{Python} package `photutils':
 8781 & 54 & α & Peg & 23 & 04 & 45.7 & +15 & 12 & 19 & A0 III-IV & +2.48 & -0.06 & -0.04 & +0.01 & -0.02 \\
 8832 &  &  &  & 23 & 13 & 17.0 & +57 & 10 & 06 & K3 V & +5.57 & +0.89 & +1.00 & +0.83 & +1.36 \\
 \bottomrule
-\caption{List of photometric standard stars.}
+\caption{List of photometric standard stars. The names of the stars are given by their \textsc{hr} number (\textsc{hr} 21), their Flamsted designation (11 Cas), and their Bayer designation (β Cas). The table is sorted by \textsc{hr} number, or equivalently by right ascension. The right ascension and declination are given in the equinox of J 2000.0}
 \label{tab:photometric-standard-stars}
 \end{longtable}
 }
 
-\chapter{Administrative Notes}
+\chapter{Administrative notes}
 
 This document describes the administrative preparations (observatory access, computing access) for the advanced student lab (ASL).
 
