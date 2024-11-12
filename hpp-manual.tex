@@ -327,7 +327,7 @@
         {\LARGE\bfseries \addfontfeature{LetterSpace=2.0} USER MANUAL}\\
         \vfill
         \includegraphics{eth-logo}\\
-        Version 3.2\\
+        Version 3.3\\
         \today
     \end{center}
 \end{titlingpage}
@@ -349,6 +349,23 @@ Current contact for the telescope: \url{thomabir@phys.ethz.ch}
 
 \noindent Current version of this manual \& LaTex source code: \url{https://github.com/thomabir/hpp-telescope-manual}
 
+\subsection*{Acknowledgements}
+
+Thank you to all those who have contributed to this document with improvements, suggestions, data, text, and corrections.
+The following is a certainly incomplete list in alphabetical order.
+Let me know if I missed your name.
+
+Andreas Bazzon,
+Thomas Birbacher,
+Natalia Engler,
+Nicolas Feuchthoften,
+Gioele Di Lernia,
+Alexander Liemen,
+Daniel Weisbecker, and
+Luca Tortorelli.
+
+
+
 \cleardoublepage
 
 \tableofcontents
@@ -364,51 +381,51 @@ Current contact for the telescope: \url{thomabir@phys.ethz.ch}
 \begin{itemize}
     \item Telescope: Planewave \textsc{cdk20}, see \cref{tab:specs-telescope} for details.
     \item Mount: 10micron \textsc{gm4000hps}, see \cref{tab:specs-mount} for details.
-    \item Camera: The camera is a \textsc{sbig stx-16803} \textsc{ccd}, see \cref{tab:specs-camera} for details.
+    \item Camera: Moravian C5A-100M, see \cref{tab:specs-camera} for details.
 \end{itemize}
 
-\begin{table}[h!]
+\begin{table}
     \centering
     \begin{tabular}{ll}
         \toprule
-        \multicolumn{2}{c}{\textbf{Planewave \textsc{cdk20} telescope}}                                         \\
+        \multicolumn{2}{c}{\textbf{Planewave \textsc{cdk20} telescope}} \\
         \midrule
-        Optical design                                 & Corrected Dall-Kirkham                                 \\
-        Aperture diameter                              & $\num{20}\,\text{in} = \SI{508}{\mm}$                  \\
-        \phantom{Aperture} area                        & \SI{0.203}{\m\squared}                                 \\
-        Focal length                                   & \SI{3454}{\mm}                                         \\
-        Diffraction limit at $\lambda = \SI{500}{\nm}$ & \SI{0.25}{\arcsecond}                                  \\
-        Focal ratio                                    & $ f/\num{6.8}$                                         \\
-        Central obstruction diameter                   & $\SI{39}{\percent} \equiv \SI{19.8}{\cm}$              \\
-        \phantom{Central obstruction} area             & $\SI{15}{\percent} \equiv \SI{308}{\cm\squared}$       \\
-        Backfocus from racked-in focuser               & \SI{147}{\mm}                                          \\
+        Optical design & Corrected Dall-Kirkham\\
+        Aperture diameter & $\num{20}\,\text{in} = \SI{508}{\mm}$ \\
+        \phantom{Aperture} area & \SI{0.203}{\m\squared} \\
+        Focal length & \SI{3454}{\mm} \\
+        Diffraction limit at $\lambda = \SI{500}{\nm}$ & \SI{0.25}{\arcsecond} \\
+        Focal ratio & $ f/\num{6.8}$ \\
+        Central obstruction diameter & $\SI{39}{\percent} \equiv \SI{19.8}{\cm}$ \\
+        \phantom{Central obstruction} area & $\SI{15}{\percent} \equiv \SI{308}{\cm\squared}$ \\
+        Backfocus from racked-in focuser & \SI{147}{\mm} \\
         \midrule
-        \multicolumn{2}{c}{Telescope + imaging chip}                                                            \\
+        \multicolumn{2}{c}{Telescope + imaging sensor} \\
         \midrule
-        Field of view                                  & $\num{36.7} \times \num{36.7}$ \si{\arcminute\squared} \\
-        Diagonal field of view                         & \SI{51.9}{\arcminute}                                  \\
-        Plate scale                                    & \SI{0.537}{\arcsecond\per\pixel}                       \\
+        Field of view & $\num{43.65} \times \num{32.75}$ \si{\arcminute\squared} \\
+        Diagonal field of view & \SI{54.55}{\arcminute} \\
+        Plate scale & \SI{0.225}{\arcsecond\per\pixel} \\
         \midrule
-        \multicolumn{2}{c}{Telescope + guiding chip}                                                            \\
+        \multicolumn{2}{c}{Telescope + guiding sensor} \\
         \midrule
-        Field of view                                  & $\num{4.71} \times \num{3.54}$\si{\arcminute\squared}  \\
-        Diagonal field of view                         & \SI{5.89}{\arcminute}                                  \\
-        Plate scale                                    & \SI{0.442}{\arcsecond\per\pixel}                       \\
+        Field of view & $\num{11.29} \times \num{7.28}$ \si{\arcminute\squared} \\
+        Diagonal field of view & \SI{13.43}{\arcminute} \\
+        Plate scale & \SI{0.350}{\arcsecond\per\pixel} \\
         \bottomrule
     \end{tabular}
     \caption{Specifications of the telescope.}
     \label{tab:specs-telescope}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}
     \centering
     \begin{tabular}{ll}
         \toprule
-        \multicolumn{2}{c}{\textbf{10micron \textsc{gm4000hps} mount}}                           \\
+        \multicolumn{2}{c}{\textbf{10micron \textsc{gm4000hps} mount}} \\
         \midrule
-        Type              & German equatorial mount                                              \\
-        Encoder           & absolute, both axes, error $< \SI{0.1}{\arcsecond}$                  \\
-        Pointing accuracy & $< \SI{20}{\arcsecond}$                                              \\
+        Type & German equatorial mount \\
+        Encoder & absolute, both axes, error $< \SI{0.1}{\arcsecond}$ \\
+        Pointing accuracy & $< \SI{20}{\arcsecond}$ \\
         Tracking accuarcy & $\approx \SI{1}{\arcsecond}$ peak-to-peak typ. over \SI{15}{\minute} \\
         \bottomrule
     \end{tabular}
@@ -416,104 +433,138 @@ Current contact for the telescope: \url{thomabir@phys.ethz.ch}
     \label{tab:specs-mount}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}
     \centering
     \begin{tabular}{ll}
         \toprule
-        \multicolumn{2}{c}{\textbf{\textsc{Sbig stx-16803} camera}}                                                    \\
+        \multicolumn{2}{c}{\textbf{Moravian C5A-100M camera}} \\
         \midrule
-        \multicolumn{2}{c}{Imaging chip}                                                                               \\
+        \multicolumn{2}{c}{Sensor} \\
         \midrule
-        \textsc{Ccd} chip                 & Kodak KAF-16803                                                            \\
-        Resolution                        & $\SI{4096}{\pixel} \times \SI{4096}{\pixel} = \SI{16.777216}{\mega\pixel}$ \\
-        Pixel size                        & $\SI{9}{\um} \times \SI{9}{\um}$                                           \\
-        \textsc{ccd} dimensions           & $\SI{36.864}{\mm} \times \SI{36.864}{\mm}$                                 \\
-        \textsc{ccd} diagonal             & $\approx \SI{52.13}{\mm}$                                                  \\
+        Model & Sony IMX461 (CMOS) \\
+        Resolution & $\SI{11664}{\pixel} \times \SI{8750}{\pixel} = \SI{102060000}{\mega\pixel}$ \\
+        Pixel size & $\SI{3.76}{\um} \times \SI{3.76}{\um}$ \\
+        Dimensions & $\SI{43.86}{\mm} \times \SI{32.90}{\mm}$ \\
+        Diagonal & \SI{54.83}{\mm} \\
+        Dark current & \SI{0.003}{\electron\per\pixel\per\second} at \SI{-20}{\celsius}\\
+        Full well capacity & \SI{65535}{\adu}? \\
+        % \midrule
+        % \multicolumn{2}{c}{Electronics}                                                                                \\
+        % \midrule
+        % Quantum efficiency                & \SI{60}{\percent} at \SI{550}{\nm}                                         \\
+        % Read noise                        & \SI{9}{\electron} \textsc{rms}                                             \\
+        % Dark current doubling temperature & \SI{6.3}{\celsius}                                                         \\
+        % A/D Gain                          & \SI{1.27}{\electron\per\adu}                                     \\
+        % A/D bits                          & \SI{16}{\bit}                                                              \\
+        \midrule \multicolumn{2}{c}{Other} \\
         \midrule
-        \multicolumn{2}{c}{Guiding chip}                                                                               \\
-        \midrule
-        \textsc{ccd} chip                 & Kodak KAI-340                                                              \\
-        Resolution                        & $\SI{640}{\pixel} \times \SI{480}{\pixel}$                                 \\
-        Pixel size                        & $\SI{7.4}{\um} \times \SI{7.4}{\um}$                                       \\
-        \textsc{ccd} dimensions           & $\SI{4.736}{\mm} \times \SI{3.552}{\mm}$                                   \\
-        \textsc{ccd} diagonal             & \SI{5.92}{\mm}                                                             \\
-        Distance between guiding chip     &                                                                            \\
-        and imaging chip                  & $\approx \SI{6}{\mm}$                                                      \\
-        \midrule
-        \multicolumn{2}{c}{Electronics}                                                                                \\
-        \midrule
-        Saturation signal                 & \SI{65535}{\adu}    \\
-        Quantum efficiency                & \SI{60}{\percent} at \SI{550}{\nm}                                         \\
-        Read noise                        & \SI{9}{\electron} \textsc{rms}                                             \\
-        Dark current                      & \SI{3}{\electron\per\pixel\per\second} at \SI{25}{\celsius},               \\
-                                          & \SI{0.02}{\electron\per\pixel\per\second} at \SI{-20}{\celsius}            \\
-        Dark current doubling temperature & \SI{6.3}{\celsius}                                                         \\
-        A/D Gain                          & \SI{1.27}{\electron\per\adu}                                     \\
-        A/D bits                          & \SI{16}{\bit}                                                              \\
-        \midrule \multicolumn{2}{c}{Other}                                                                             \\
-        \midrule Exposure time            & \SIrange{0.1}{3600}{\second}                                               \\
-        Pixel digitisation rate           & \SI{1.8}{\mega\pixel\per\second}                                           \\
-        Full frame digitisation time      & \SI{9.5}{\second}                                                          \\
-        Full frame download time          & \SI{2}{\second}                                                            \\
-        Cooling                           & Two stage thermoelectric, \SI{-50}{\celsius}$\Delta T$                     \\
-        Power supply                      & \SI{12}{\volt} \textsc{dc} at \SI{9.5}{\ampere}                            \\
+        Exposure time & min. \SI{200}{\micro\second}, no upper limit \\
+        Rolling shutter delay & \SI{0.36}{\second} between first row and last row \\
+        Image download time & \SI{0.66}{\second} full frame, no binning \\
+        & \SI{0.43}{\second} full frame, 2x2 hardware binning \\
+        & \SI{0.05}{\second} $\SI{1024}{\pixel} \times \SI{1024}{\pixel}$ sub-frame \\
+        Cooling & Thermoelectric, $\Delta T = \SI{-45}{\celsius}$ \\
+        Power supply & \SI{12}{\volt} \textsc{dc} at \SI{10}{\ampere} \\
         \bottomrule
     \end{tabular}
-    \caption{Specifications of the camera.}
+    \caption{Specifications of the Moravian C5A-100M camera.}
     \label{tab:specs-camera}
 \end{table}
 
+\begin{table}
+    \centering
+    \footnotesize
+    \begin{tabular}{
+        S[table-format=4.0]
+        S[table-format=2.1]
+        S[table-format=2.0]
+        S[table-format=1.2]
+        S[table-format=1.1]
+        S[table-format=2.1]
+        S[table-format=5.0]
+        S[table-format=5.0]}
+        \toprule
+        {Setting} &
+        \multicolumn{2}{c}{{Gain}} &
+        {Conversion factor} &
+        \multicolumn{2}{c}{{Read noise}} &
+        \multicolumn{2}{c}{{Full well capacity}}\\
+        \cmidrule(lr){2-3}
+        \cmidrule(lr){4-4}
+        \cmidrule(lr){5-6}
+        \cmidrule(lr){7-8}
+        & {dB} & {mult.} & {\si{\electron\per\adu}} & {\si{\electron}} & {\si{\adu}} & {\si{\electron}} & {\si{\adu}}\\
+        \midrule
+        0 & 0.0 & 1 & 0.67 & 3.5 & 5.2 & 50000 & 65535\\
+        2749 & 9.7 & 3 & 0.25 & 3.1 & 12.5 & 16500 & 65535\\
+        2750 & 9.7 & 3 & 0.25 & 1.5 & 6.0 & 16500 & 65535\\
+        4030 & 36.0 & 63 & 0.17 & 1.4 & 8.5 & 11200 & 65535\\
+        \bottomrule
+    \end{tabular}
+    \caption{Gain settings of the Moravian C5A-100M camera.}
+    \label{tab:camera-gain}
+\end{table}
 
+\begin{table}
+    \centering
+    \begin{tabular}{ll}
+        \toprule
+        \multicolumn{2}{c}{\textbf{QHY5III174M guide camera}} \\
+        \midrule
+        \multicolumn{2}{c}{Sensor} \\
+        \midrule
+        Model & Sony \textsc{imx174} (\textsc{cmos}) \\
+        Resolution (with overscan area) & $\SI{1936}{\pixel} \times \SI{1216}{\pixel} = \SI{2 354 176}{\mega\pixel}$ \\
+        Resolution (without overscan area) & $\SI{1920}{\pixel} \times \SI{1200}{\pixel} = \SI{2 304 000}{\mega\pixel}$ \\
+        Pixel size & $\SI{5.86}{\um} \times \SI{5.86}{\um}$ \\
+        Dimensions & $\SI{11.34}{\mm} \times \SI{7.13}{\mm}$ \\
+        Diagonal & \SI{13.40}{\mm} \\
+        Full well capacity & $\approx \SI{32000}{\electron}$ \\
+        Peak quantum efficiency & \SI{78}{\percent} \\
+        Read noise & \SI{5.3}{\electron} at gain 0, \SI{1.6}{\electron} at gain 100 \\
+        \textsc{A/D} conversion factor & \SI{0.46}{\electron\per\adu} at gain 0 \\
+        \textsc{Adc} bits & \SI{12}{\bit} \\
+        \midrule \multicolumn{2}{c}{Other} \\
+        \midrule
+        Back focus & \SI{11}{\mm} \\
+        Exposure time & \SI{5}{\micro\second} to \SI{900}{\second} \\
+        Maximum frame rate (8 bit) & 38 \textsc{fps} at $\num{1936} \times \SI{1216}{\pixel}$\\
+        & 260 \textsc{fps} at $\num{960} \times \SI{600}{\pixel}$ \\
+        & 490 \textsc{fps} at $\num{480} \times \SI{300}{\pixel}$ \\
+        Cooling & Uncooled \\
+        \bottomrule
+    \end{tabular}
+    \caption{Specifications of the QHY5III174M guide camera.}
+    \label{tab:specs-guide-camera}
+\end{table}
 
-% \begin{table}[h!]
-%     \centering
-%     \footnotesize
-%     \begin{tabular}{
-%         S[table-format=4.0]
-%         S[table-format=2.1]
-%         S[table-format=2.0]
-%         S[table-format=1.2]
-%         S[table-format=1.1]
-%         S[table-format=2.1]
-%         S[table-format=5.0]
-%         S[table-format=5.0]}
-%         \toprule
-%         {Setting} &
-%         \multicolumn{2}{c}{{Gain}} &
-%         {Conversion factor} &
-%         \multicolumn{2}{c}{{Read noise}} &
-%         \multicolumn{2}{c}{{Full well capacity}}\\
-%         \cmidrule(lr){2-3}
-%         \cmidrule(lr){4-4}
-%         \cmidrule(lr){5-6}
-%         \cmidrule(lr){7-8}
-%         & {dB} & {mult.} & {\si{\electron\per\adu}} & {\si{\electron}} & {\si{\adu}} & {\si{\electron}} & {\si{\adu}}\\
-%         \midrule
-%         0 & 0.0 & 1 & 0.67 & 3.5 & 5.2 & 50000 & 65535\\
-%         2749 & 9.7 & 3 & 0.25 & 3.1 & 12.5 & 16500 & 65535\\
-%         2750 & 9.7 & 3 & 0.25 & 1.5 & 6.0 & 16500 & 65535\\
-%         4030 & 36.0 & 63 & 0.17 & 1.4 & 8.5 & 11200 & 65535\\
-%         \bottomrule
-%     \end{tabular}
-%     \caption{Gain settings of the Moravian C5 camera.}
-%     \label{tab:camera-gain}
-% \end{table}
+\begin{table}
+    \centering
+    \begin{tabular}{lllllll}
+        \toprule
+        Pos. & Name & \multicolumn{4}{c}{Wavelength (nm)} & Part number\\
+        \cmidrule(lr){3-6}
+        & & Min. & Central & Max. & Bandwitdh & \\
+        \midrule
+        1 & R & 595 & & 690 & & Baader 2458485R\\
+        2 & G & 490 & & 580 & & Baader 2458485G\\
+        3 & B & 400 & & 510 & & Baader 2458485B\\
+        4 & Hα & & 656.3 & & 6.5 & Baader 2961105\\
+        5 & O \textsc{iii} & & 500.7 & & 6.5 & Baader 2961180\\
+        6 & S \textsc{ii} & & 671.7 & & 6.5 & Baader 2961255\\
+        7 & Clear & & & & & Baader 2458421\\
+        \bottomrule
+    \end{tabular}
+    \caption{Filters.}
+    \label{tab:filters}
+\end{table}
 
 \clearpage
 
-\section{Start-up} The following steps have to be performed to use the telescope:
-\begin{enumerate}
-    \item Open the dome
-    \item Remove the mirror cover
-    \item Power-on the instruments
-    \item Unpark the mount
-\end{enumerate}
-They are described in detail in the next sections.
+\section{Start-up}
 
 \subsection{Opening the dome}
 
-Observations are only allowed if the dome can be opened completely and locked in its open position.
-To open the dome, follow these steps:
 \begin{enumerate}
     \item Fully open both doors.
     \item Snap the doors into their door locks such that they cannot swing back, as in \cref{fig:door-locks}.
@@ -564,7 +615,6 @@ To install or remove the cover, pull back the spandex stray light cover, and pas
 
 \subsection{Power-on the instruments}
 
-To power on the instruments, perform the following actions:
 \begin{enumerate}
     \item \textbf{Check instruments.
           }
@@ -630,7 +680,6 @@ The shut-down procedure is the reverse of the start-up procedure:
     \item Disconnect the control software (e.g.
           N.I.N.A., PWI3) using the remote computer.
     \item Shutdown the remote computer.
-    \item (Optional, if you used the finder scope) Turn off the light of the finder scope.
     \item Shutdown the mount, and wait until the hand controller goes dark.
     \item Turn off the main power switch
     \item Install the mirror cover
@@ -646,77 +695,38 @@ The shut-down procedure is the reverse of the start-up procedure:
 \subsection{Replacing the mount battery}
 \label{sec:mount-battery-replace}
 
-If the clock of the mount resets whenever you power off the mount, the battery of the controller is probably dead.
-Open the connection box of the mount (where the controller plugs in), and replace the \textsc{cr3032} coin cell with a new one.
+If the battery of the mount is empty, the mount will forget the time and date upon power-off.
+This is usually not a problem, as the mount will acquire the current time and date from the \textsc{gps} signal.
+
+To replace the battery, open the connection box of the mount (where the controller plugs in), and replace the \textsc{cr3032} coin cell with a new one.
 The battery should last for a few years.
 
-To change the time with the hand controller: \texttt{MENU -> Local data -> Clock -> Date and time}.
+To manually change the time with the hand controller if the \textsc{gps} fails: \texttt{MENU -> Local data -> Clock -> Date and time}.
 You can also use the \texttt{Clock Sync} software on the computer.
-
-\subsection{Finder scope}
-The finder scope (\cref{fig:finder-scope}) has a holographic sight that can be used to roughly align the telescope.
-It is currently not aligned with the main telescope.
-After using it, do not forget to switch off the holographic sight, since the battery will run out otherwise.
-
-\begin{figure}[t!]
-    \centering
-    \includegraphics[width=0.47\textwidth]{finder-scope}
-    \caption{Finder scope.
-        Off position (circle) for the light modulator from the front.
-        Also indicated are the caps (B) which protect the alignment knobs for x and y direction.
-    }
-    \label{fig:finder-scope}
-\end{figure}
 
 \subsection{Mounting the camera}
 \label{sec:install-camera}
 
-\begin{important}
-    Mounting or dismounting the camera requires two people.
-    Do not try it on your own!
-\end{important}
+TODO: rework this section for the new camera.
 
-To mount the camera, use the red US Allen key set.
+Mounting the camera:
 \begin{enumerate}
     \item
-          Remove the eyepiece and the eyepiece adapter plate from the telescope with a 5/32'' Allen key, see \cref{fig:adapter-plate-eyepiece}.
+          Make sure the correct adapter plate is installed on the telescope. It can be installed with four screws using the 5/32 inch Allen key, see \cref{fig:adapter-plate-eyepiece}.
     \item
-          Attach the camera adapter plate to the telescope with a 5/32'' Allen key, see \cref{fig:adapter-plate-camera}.
-          Make sure the wedge in the adapter plate faces away from the CDK control panel.
-    \item
-          Remove the cover plate from the cover, see \cref{fig:camera-cover-plate}.
-    \item
-          Loosen the four screws at the camera flange with a 5/64'' Allen key, see \cref{fig:camera-mount-screws}.
+          Remove the cover plate from the camera, see \cref{fig:camera-cover-plate}.
     \item
           Bring the camera to the telescope.
-          One person holds the camera such that the autoguider head is on the same side as the wedge in the adapter plate, see \cref{fig:camera-attach}.
+          While holding the camera firmly with one hand, use the other hand to guide the camera onto the adapter plate and tighten the hand screw firmly. Make sure the camera is secured by gently applying some force in various directions, and checking that there is no wobble or flexing.
     \item
-          The other person fixes the four screws at the camera flange with a 5/64'' Allen key, see \cref{fig:camera-attach}
-    \item
-          Remove the camera USB and power cables from the cable strap.
-    \item
-          Plug in the power and USB cables, see \cref{fig:camera-cables}.
+          Remove the camera USB and power cables from the cable strap, and plug them in, see \cref{fig:camera-cables}.
 \end{enumerate}
 
 \begin{figure}
     \centering
-    \begin{subfigure}[t]{0.47\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{adapter-ccd}
-        \caption{Adapter plate for the camera.
-            Note that the wedge in the adapter plate, marked by a circle, must face up, away from the CDK control panel.
-        }
-        \label{fig:adapter-plate-camera}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.47\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{adapter-visual}
-        \caption{Adapter plate for visual observations.}
-        \label{fig:adapter-plate-eyepiece}
-    \end{subfigure}
-    \caption{Adapter plates for attaching equipment.
-        Use a 5/32'' Allen key to change adapter plates.
-    }
+    \includegraphics[width=0.5 \textwidth]{adapter-visual}
+    \caption{Adapter plate for the camera and for visual observations.}
+    \label{fig:adapter-plate-eyepiece}
 \end{figure}
 
 \begin{figure}
@@ -759,10 +769,15 @@ To mount the camera, use the red US Allen key set.
 \end{figure}
 
 To dismount the cameras, follow the steps in the reverse direction.
-Make sure to attach the loose USB and power cables at the telescope with the cable strap, such that they do not get stuck when the telescope moves.
 
-Do not remove the filter wheel from the camera unless absolutely necessary, since the filters are fragile and sensitive to dust and scratches.
-The filter wheel position sensor can also easily be damaged when the filter wheel is opened incorrectly.
+
+\begin{important}
+    Make sure to always attach loose cables at the back of the telescope with cable straps. Otherwise, the cables can be ripped out when the telescope moves.
+\end{important}
+
+
+Do not remove the filter wheel from the camera unless absolutely necessary, since the filters are sensitive to dust and scratches.
+The filter wheel position sensor can easily be damaged when disassembling the filter wheel.
 
 \chapter{Visual observation}
 
@@ -887,7 +902,7 @@ The following software on the remote computer can be used:
           \textbf{\texttt{Stellarium}} is used to select observation targets and check their properties.
           It also has a preview for the field of view of the telescope.
     \item
-          \textbf{\texttt{Clock sync}} is used to synchronise the clock of the mount with the clock of the computer, which is kept accurate via the internet.
+          \textbf{\texttt{Clock sync}} can be used to synchronise the clock of the mount with the clock of the computer. Usually not necessary, as the mount acquires the current time via the \textsc{gps} signal.
     \item
           \textbf{\texttt{Virtual keypad}} can be used to control the mount with the same interface as on the hand controller.
     \item
@@ -1179,7 +1194,6 @@ Note that the correct focus position may change significantly after performing t
     \label{finder}
 \end{figure}
 
-
 % Add here: Stellarium screenshot of guider position and settings. maybe reference \ref{fig:NINA:}
 
 To guide with the dual-chip guider using the Ha filter, which is the most challenging filter to guide with, use a guide star that is magnitude 11 or brighter to get an SNR of 15 with a guider exposure time of 15 seconds.
@@ -1243,19 +1257,17 @@ Quick instructions:
 % Install Python 3.10 (from Python website) and Mountwizzard4 from github.
 
 \begin{enumerate}
-    \item Change the filter to L in N.I.N.A., such that you can use fast exposure times during alignment.
-          
-          Then, you can close N.I.N.A.
-    \item
-          Open \texttt{Command Prompt}, and enter
+    \item Change the filter to C in N.I.N.A., such that you can use fast exposure times during alignment. Disconnect all equipment in N.I.N.A. and close N.I.N.A.
+    \item Open \texttt{Command Prompt}, and enter
           \begin{minted}{bash}
-      cd Downloads\MountWizzard4
-      startup.pyz
-  \end{minted}
+              cd Downloads\MountWizzard4
+              startup.pyz
+          \end{minted}
           After a few seconds, the software will open.
     \item
           Go to the \texttt{Settings} tab, and make sure that the camera driver is set to \texttt{ASCOM.
-              HomeMade.SBIGImagingCamera}, and that the plate solve is set to \texttt{ASTAP}.
+              MoravinstCCD}, and that the plate solve is set to \texttt{ASTAP}.
+    \item It's a good idea to also get onlineWeather data, since temperature and pressure of the air can affect the pointing of the telescope. You can get a free API key from a weather provider and configure it in MountWizzard, then under `Environ', sync the online weather data to the mount computer.
     \item
           Verfiy that in the top bar, at least the following three devices light up green: Mount, Camera, and Solver.
     \item
@@ -1264,7 +1276,7 @@ Quick instructions:
               \item
                     Exposure: 3s
               \item
-                    Binning: 3
+                    Binning: 4
               \item
                     Subframe: \SI{100}{\percent}
               \item
@@ -1278,7 +1290,7 @@ Quick instructions:
               \item
                     For a quick alignment, select \texttt{For Alignment}, and 6 points. (takeds a few minutes)
               \item
-                    For a full model, select 95 points with a Golden Spiral. (takes one hour, usually not necessary)
+                    For a full model, select 95 points with a Golden Spiral. (very accurate, usually not necessary)
           \end{itemize}
     \item
           Go to \texttt{Modelling -> Model Build and Program}, press \texttt{Run}.
@@ -2181,7 +2193,7 @@ The aim of the experiment is to morphologically classify a sample of local ellip
 
 Most of the steps in \ref{section:data_red_steps} have to be performed.
 
-For this experiment, students need to use \software{GALFIT} to fit the galaxy image with a Sérsic light profile following the examples in \url{https://users.obs.carnegiescience.edu/peng/work/GALFIT/GALFIT-ex.tar.gz} and the rules of thumb in \url{https://users.obs.carnegiescience.edu/peng/work/GALFIT/TOP10.html}.
+Use \software{GALFIT} to fit the galaxy image with a Sérsic light profile following the examples in \url{https://users.obs.carnegiescience.edu/peng/work/GALFIT/GALFIT-ex.tar.gz} and the rules of thumb in \url{https://users.obs.carnegiescience.edu/peng/work/GALFIT/TOP10.html}.
 
 
 \begin{itemize}
@@ -2210,8 +2222,8 @@ For this experiment, students need to use \software{GALFIT} to fit the galaxy im
 
 \subsection{Theory}
 
-By inspecting the orbital motion of Jupiter's and Saturn's moons (\cref{fig:jupiter}), it is possible to estimate the mass of the planets.
-Assuming that the mass of the moons is small compared to the mass of the planet, then the gravitational force acting on each moon is
+By inspecting the orbital motion of Jupiter's and Saturn's moons (\cref{fig:jupiter}), it is possible to estimate the mass of these planets.
+The gravitational force acting on each moon is
 \begin{equation*}
     F_G = G \frac{M m}{r^2},
 \end{equation*}
@@ -2219,6 +2231,7 @@ where $G$ is the gravitational constant,
 $M$ is the mass of the planet,
 $m$ the mass of the moon,
 and $r$ the distance between the two.
+Here, we neglect the force that the other moons exert on the moon of interest, as their influence is very small.
 
 If we further assume that the moons move on circular orbits around the planet, then the centripetal force that must be exerted on the moon is
 \begin{equation*}
@@ -2226,11 +2239,11 @@ If we further assume that the moons move on circular orbits around the planet, t
 \end{equation*}
 where
 $\omega$ is the angular velocity of the moon.
-By equating the two formulas above, and using the relation between angular velocity $\omega$ and period $T$, we obtain
+By equating $F_G = F_C$, and using the relation $\omega = 2 \pi / T$ with period $T$, we obtain
 \begin{equation}
-    \frac{T^2}{r^3} = \frac{4 \pi^2 G}{M}.
+    \frac{T^2}{r^3} = \frac{4 \pi^2}{G M}.
 \end{equation}
-Thus, the mass $M$ of a planet can be estimated from measurements of radius and period of its moons.
+Thus, the mass $M$ of the planet can be estimated from measurements of radius and period of its moons.
 
 \subsection{Recommended reading}
 \begin{itemize}
@@ -2240,13 +2253,14 @@ Thus, the mass $M$ of a planet can be estimated from measurements of radius and 
 
 \subsection{Aim of the experiment}
 
-The aim of the experiment is to measure the mass of Jupiter and/or Saturn using their moon orbits.
-This experiment is not always available given the different relative positions of Sun, Earth and Jupiter/Saturn during the years.
+The aim of this experiment is to measure the masses of Jupiter and Saturn by analysing the orbits of their moons.
+This experiment is not always available, as it requires that at least one of the planets is visible from Earth at night.
+
+\subsection{Observing strategy}
+
 During the observations, students need to collect the calibration images (bias, dark, flat) and images of their targets in the B, V and R bands.
 They need to take multi-epoch observations of Jupiter/Saturn and their moons in order to reconstruct the orbit of the objects.
 Multiple days of observations are therefore required to obtain optimal results.
-
-\subsection{Observing strategy}
 
 \subsection{Data analysis}
 
@@ -2311,7 +2325,7 @@ and $m_{\odot}$ is the apparent magnitude of the sun.
 
 \subsection{Aim of the experiment}
 
-The aim of the experiment is to measure the geometric albedo of the Solar system planets.
+The aim of the experiment is to measure the geometric albedo $p$ of a sample of Solar system planets.
 The targets for the experiment depends on which planets are observable from Earth in the specific semester of observations.
 During the observations, students need to collect the calibration images (bias, dark, flat) and images of their targets in the B, V and R bands.
 Students need also to collect images of a standard star to estimate the photometric zero-point.
@@ -2382,8 +2396,7 @@ They can perform these tasks using the \software{Python} package `photutils':
 \chapter{List of photometric standard stars}
 \label{ch:photometric-standard-stars}
 
-\Cref{tab:photometric-standard-stars} is a list of photometric standard stars that can be used for photometric calibration, as described in \cref{ssec:photometric-calibration}.
-
+\Cref{tab:photometric-standard-stars} lists photometric standard stars that can be used for photometric calibration, as described in \cref{ssec:photometric-calibration}. Unfortunately, we do not know the origin of the list, and we simply reproduce here a printout that has been used in previous years. Let me know if you know the origin of this data, so that we may cite it properly.
 
 {\footnotesize
     \begin{longtable}{
