@@ -1699,27 +1699,31 @@ To store a numpy array as a fits file, you can use:
 \section{Dark subtraction and flat field correction}
 \label{ssec:dark-flat-correction}
 
-% TODO add more explanations here, add code, and make it more explicit.
-
-The bias, dark subtraction and the flat fielding correction are applied to the 'raw science frame' according to the following:
+Each science frame has to be corrected with a master dark frame and a master flat frame, following
 \begin{equation}
     \label{eq:correction}
-    \text{science frame} = \frac{\text{raw science frame} - \text{master dark} }{\text{master flat} / \langle \text{master flat} \rangle} 
+    \text{calibrated science frame} = \frac{\text{raw science frame} - \text{master dark} }{\text{normalised master flat}}.
 \end{equation}
-`science frame' refers to the `raw science frame' after bias, dark subtraction and flat fielding correction.
-`master bias' refers to the median image of all the bias frames. 'master dark' refers to the median image of all the 'dark for science' images, the latter being subtracted for the `master bias'. 'master flat' refers to the median image of all the flat images after 'dark for flats' subtraction and `master bias' subtraction. $ \left \langle \mathrm{master\ flat} \right \rangle$ is the mean value of the 'master flat' image.
+Note that the master dark frame has to have the same exposure time as the science frame that you are correcting, and that the master flat has to have the same filter as the science frame.
 
-
-In order to create a median image, you can for example store each 'data' variable for each image as element of a list or create a 3D array having size as the number of images times the number of pixels for each side of the image.
-Then you simply run
+The master dark frame for a specific exposure time is the pixel-wise median of all dark frames with this exposure time:
 \begin{minted}{python}
-    import numpy as np
-    median_image = np.median(image_list, axis=0)
+    master_dark_5s = np.median(dark_frames_5s, axis=0)
 \end{minted}
-The variable 'median image' will contain the median of the electronic counts of the different images pixels.
+This assumes that you have made a list that contains all the dark frames with \SI{5}{\second} exposure time.
+The purpose of the median is to reduce random noise, and to reject outliers, such as cosmic rays.
 
+Similarly, the master flat frame is the pixel-wise median of the normalised flat frames:
+\begin{minted}{python}
+    normalised_flats_R = [flat / np.median(flat) for flat in flats_R]
+    master_flat_R = np.median(normalised_flats_R, axis=0)
+\end{minted}
+We normalise them first because the brightness of the twilight sky changes quickly from frame to frame, and we want to compensate for that.
 
-Once you create the different median images, you can perform the dark subtraction and the flat fielding corrections as in \cref{eq:correction}.
+The calibrated science frame is then calculated according to \cref{eq:correction}:
+\begin{minted}{python}
+    calibrated_science_001 = (science_001 - master_dark) / master_flat
+\end{minted}
 
 \section{Cosmic ray rejection}
 \label{ssec:cosmic-ray-rejection}
